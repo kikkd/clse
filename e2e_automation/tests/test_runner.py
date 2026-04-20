@@ -86,6 +86,12 @@ def _get_text(page, element):
     return text.strip()
 
 
+def _should_navigate(row):
+    """skip_navigate 컬럼이 yes/1/true/y 이면 False(탐색 생략), 그 외 True."""
+    val = str(row.get("skip_navigate", "")).strip().lower()
+    return val not in ("yes", "1", "true", "y")
+
+
 def _do_click(page, row):
     """공통 클릭 동작: locator_type/locator_value/nth 읽어서 클릭."""
     loc = _locator(row)
@@ -145,7 +151,8 @@ def tc_page_load(page, url, row, reporter):
     """페이지 접속 후 타이틀 및 URL 확인."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         assert page.get_title(), "페이지 타이틀이 비어 있음"
         expected_url = row.get("expected_url_contains", "").strip()
         if expected_url:
@@ -161,7 +168,8 @@ def tc_click(page, url, row, reporter):
     """엘리먼트 클릭."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)
@@ -189,7 +197,8 @@ def tc_click_and_verify(page, url, row, reporter):
     """
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
 
         wait_before = _parse_wait(row, "wait_before")
         if wait_before:
@@ -211,10 +220,11 @@ def tc_click_and_verify(page, url, row, reporter):
 
 
 def tc_input(page, url, row, reporter):
-    """텍스트 입력만 (제출 없음)."""
+    """텍스트 입력만 (제출 없음). locator_type/locator_value + input_text 컬럼 사용."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)
@@ -229,10 +239,11 @@ def tc_input(page, url, row, reporter):
 
 
 def tc_input_and_submit(page, url, row, reporter):
-    """텍스트 입력 후 버튼 제출."""
+    """텍스트 입력 후 버튼 제출. input_locator_*/submit_locator_* 컬럼 사용."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)
@@ -259,7 +270,8 @@ def tc_verify_text(page, url, row, reporter):
     """엘리먼트 텍스트 일치 확인."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)
@@ -283,7 +295,8 @@ def tc_verify_present(page, url, row, reporter):
     """엘리먼트 존재 확인."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)
@@ -307,7 +320,8 @@ def tc_verify_url(page, url, row, reporter):
         expected = row.get("expected_url_contains", "").strip()
         if not expected:
             raise ValueError("expected_url_contains 컬럼이 비어 있습니다.")
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)
@@ -323,7 +337,8 @@ def tc_select(page, url, row, reporter):
     """드롭다운 선택 (select_by: text | value | index)."""
     start = time.time()
     try:
-        page.navigate(url)
+        if _should_navigate(row):
+            page.navigate(url)
         wait = _parse_wait(row)
         if wait:
             time.sleep(wait)

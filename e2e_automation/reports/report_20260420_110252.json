@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 4,
+    "passed": 1,
+    "failed": 3,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 46.61,
+    "pass_rate": "25.0%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "메인 페이지 로딩 확인",
+      "status": "PASS",
+      "duration": 3.12,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_load.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:02:16.069440"
+    },
+    {
+      "test_id": "TC_SUITE_011",
+      "description": "아이디 입력",
+      "status": "FAIL",
+      "duration": 11.41,
+      "error_msg": "Message: Element not found: ('id', 'username')\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_011_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:02:27.481501"
+    },
+    {
+      "test_id": "TC_SUITE_012",
+      "description": "패스워드 입력",
+      "status": "FAIL",
+      "duration": 11.42,
+      "error_msg": "Message: Element not found: ('id', 'password')\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_012_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:02:38.905969"
+    },
+    {
+      "test_id": "TC_SUITE_013",
+      "description": "로그인 버튼 클릭",
+      "status": "FAIL",
+      "duration": 11.47,
+      "error_msg": "[login-btn] 클릭 실패 | locator=('id', 'login-btn') | 사유=Message: \nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_013_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:02:50.379308"
+    }
+  ]
+}

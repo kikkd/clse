@@ -1,0 +1,47 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 3,
+    "passed": 1,
+    "failed": 2,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 26.86,
+    "pass_rate": "33.3%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "메인 페이지 로딩 확인",
+      "status": "PASS",
+      "duration": 2.79,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_load.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:44:06.446903"
+    },
+    {
+      "test_id": "TC_SUITE_002",
+      "description": "버튼 클릭 후 성공 메시지 존재 확인",
+      "status": "FAIL",
+      "duration": 13.75,
+      "error_msg": "Elements not found: ('class', 'logo')",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_002_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:44:20.197121"
+    },
+    {
+      "test_id": "TC_SUITE_003",
+      "description": "id",
+      "status": "FAIL",
+      "duration": 1.45,
+      "error_msg": "[submit_locator_type / submit_locator_value] 컬럼이 비어 있습니다.",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_003_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:44:21.650374"
+    }
+  ]
+}
