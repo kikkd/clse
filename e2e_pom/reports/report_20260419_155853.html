@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>E2E Test Suite - Report</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f6f8; }
+    header { background: #2c3e50; color: #fff; padding: 20px 30px; }
+    header h1 { margin: 0; font-size: 1.5em; }
+    .summary { display: flex; gap: 16px; padding: 20px 30px; flex-wrap: wrap; }
+    .card { background: #fff; border-radius: 8px; padding: 16px 24px; box-shadow: 0 1px 4px rgba(0,0,0,.1); min-width: 110px; text-align: center; }
+    .card .num { font-size: 2em; font-weight: bold; }
+    .card .lbl { font-size: .8em; color: #7f8c8d; }
+    .pass { color: #2ecc71; } .fail { color: #e74c3c; } .skip { color: #95a5a6; } .err { color: #e67e22; }
+    table { width: calc(100% - 60px); margin: 0 30px 30px; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    th { background: #34495e; color: #fff; padding: 10px 12px; text-align: left; font-size: .85em; }
+    td { padding: 9px 12px; border-bottom: 1px solid #ecf0f1; font-size: .85em; word-break: break-all; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+  </style>
+</head>
+<body>
+  <header><h1>📋 E2E Test Suite</h1><p style="margin:4px 0 0;opacity:.7">Generated: 2026-04-19 15:58:53 | Duration: 23.72s</p></header>
+  <div class="summary">
+    <div class="card"><div class="num">2</div><div class="lbl">Total</div></div>
+    <div class="card"><div class="num pass">1</div><div class="lbl">Pass (50.0%)</div></div>
+    <div class="card"><div class="num fail">1</div><div class="lbl">Fail</div></div>
+    <div class="card"><div class="num err">0</div><div class="lbl">Error</div></div>
+    <div class="card"><div class="num skip">0</div><div class="lbl">Skip</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Description</th><th>Status</th><th>Duration</th><th>Browser</th><th>URL</th><th>Error</th><th>Shot</th></tr></thead>
+    <tbody><tr><td>TC_SUITE_001</td><td>메인 페이지 로딩 확인</td><td style="color:#2ecc71;font-weight:bold">PASS</td><td>3.39s</td><td>chrome</td><td>https://job.denall.com/hire-announce-main</td><td style="color:#c0392b;font-size:.85em">-</td><td><a href="C:\Users\whddl\OneDrive\바탕 화면\cl\e2e_automation\reports\screenshots\TC_SUITE_001_load.png" target="_blank">📷</a></td></tr>
+<tr><td>TC_SUITE_005</td><td>버튼 클릭 후 성공 메시지 존재 확인</td><td style="color:#e74c3c;font-weight:bold">FAIL</td><td>12.97s</td><td>chrome</td><td>https://job.denall.com/hire-announce-main</td><td style="color:#c0392b;font-size:.85em">Elements not found: ('class', 'logo.textContent')</td><td><a href="C:\Users\whddl\OneDrive\바탕 화면\cl\e2e_automation\reports\screenshots\TC_SUITE_005_fail.png" target="_blank">📷</a></td></tr>
+</tbody>
+  </table>
+</body>
+</html>

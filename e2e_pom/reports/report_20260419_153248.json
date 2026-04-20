@@ -1,0 +1,25 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 19.68,
+    "pass_rate": "0.0%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_004",
+      "description": "More information 링크 클릭",
+      "status": "FAIL",
+      "duration": 14.07,
+      "error_msg": "[.logo] Message: \n",
+      "screenshot": "C:\\Users\\whddl\\OneDrive\\바탕 화면\\cl\\e2e_automation\\reports\\screenshots\\TC_SUITE_004_fail.png",
+      "url": "https://job.denall.com/hire-announce-main",
+      "browser": "chrome",
+      "timestamp": "2026-04-19T15:32:46.121252"
+    }
+  ]
+}

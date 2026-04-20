@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>E2E Test Suite - Report</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f4f6f8; }
+    header { background: #2c3e50; color: #fff; padding: 20px 30px; }
+    header h1 { margin: 0; font-size: 1.5em; }
+    .summary { display: flex; gap: 16px; padding: 20px 30px; flex-wrap: wrap; }
+    .card { background: #fff; border-radius: 8px; padding: 16px 24px; box-shadow: 0 1px 4px rgba(0,0,0,.1); min-width: 110px; text-align: center; }
+    .card .num { font-size: 2em; font-weight: bold; }
+    .card .lbl { font-size: .8em; color: #7f8c8d; }
+    .pass { color: #2ecc71; } .fail { color: #e74c3c; } .skip { color: #95a5a6; } .err { color: #e67e22; }
+    table { width: calc(100% - 60px); margin: 0 30px 30px; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+    th { background: #34495e; color: #fff; padding: 10px 12px; text-align: left; font-size: .85em; }
+    td { padding: 9px 12px; border-bottom: 1px solid #ecf0f1; font-size: .85em; word-break: break-all; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+  </style>
+</head>
+<body>
+  <header><h1>📋 E2E Test Suite</h1><p style="margin:4px 0 0;opacity:.7">Generated: 2026-04-20 11:12:27 | Duration: 25.67s</p></header>
+  <div class="summary">
+    <div class="card"><div class="num">4</div><div class="lbl">Total</div></div>
+    <div class="card"><div class="num pass">3</div><div class="lbl">Pass (75.0%)</div></div>
+    <div class="card"><div class="num fail">1</div><div class="lbl">Fail</div></div>
+    <div class="card"><div class="num err">0</div><div class="lbl">Error</div></div>
+    <div class="card"><div class="num skip">0</div><div class="lbl">Skip</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Description</th><th>Status</th><th>Duration</th><th>Browser</th><th>URL</th><th>Error</th><th>Shot</th></tr></thead>
+    <tbody><tr><td>TC_SUITE_001</td><td>메인 페이지 로딩 확인</td><td style="color:#2ecc71;font-weight:bold">PASS</td><td>2.80s</td><td>chrome</td><td>https://hippo2qa.osstem.com/web/login</td><td style="color:#c0392b;font-size:.85em">-</td><td><a href="C:\Users\Osstem\Desktop\cl\clse\e2e_automation\reports\screenshots\TC_SUITE_001_load.png" target="_blank">📷</a></td></tr>
+<tr><td>TC_SUITE_011</td><td>아이디 입력</td><td style="color:#2ecc71;font-weight:bold">PASS</td><td>1.29s</td><td>chrome</td><td>https://hippo2qa.osstem.com/web/login</td><td style="color:#c0392b;font-size:.85em">-</td><td><a href="C:\Users\Osstem\Desktop\cl\clse\e2e_automation\reports\screenshots\TC_SUITE_011_input.png" target="_blank">📷</a></td></tr>
+<tr><td>TC_SUITE_012</td><td>패스워드 입력</td><td style="color:#2ecc71;font-weight:bold">PASS</td><td>1.31s</td><td>chrome</td><td>https://hippo2qa.osstem.com/web/login</td><td style="color:#c0392b;font-size:.85em">-</td><td><a href="C:\Users\Osstem\Desktop\cl\clse\e2e_automation\reports\screenshots\TC_SUITE_012_input.png" target="_blank">📷</a></td></tr>
+<tr><td>TC_SUITE_013</td><td>로그인 버튼 클릭</td><td style="color:#e74c3c;font-weight:bold">FAIL</td><td>11.40s</td><td>chrome</td><td>https://hippo2qa.osstem.com/web/login</td><td style="color:#c0392b;font-size:.85em">[login-btn] 클릭 실패 | locator=('id', 'login-btn') | 사유=Message: 
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x76c733+10b73]
+	chromedriver!GetHandleVerifier [0x76c864+10ca4]
+	chromedriver!(No symbol) [0x542100]
+	chromedriver!(No symbol) [0x58acba]
+	chromedriver!(No symbol) [0x58af5b]
+	chromedriver!(No symbol) [0x5cd9c2]
+	chromedriver!(No symbol) [0x5adc64]
+	chromedriver!(No symbol) [0x5cb1f4]
+	chromedriver!(No symbol) [0x5ad9b6]
+	chromedriver!(No symbol) [0x580339]
+	chromedriver!(No symbol) [0x5810f4]
+	chromedriver!GetHandleVerifier [0x9cfe04+274244]
+	chromedriver!GetHandleVerifier [0x9cb459+26f899]
+	chromedriver!GetHandleVerifier [0x9e9bd5+28e015]
+	chromedriver!GetHandleVerifier [0x787188+2b5c8]
+	chromedriver!GetHandleVerifier [0x78f23d+3367d]
+	chromedriver!GetHandleVerifier [0x775138+19578]
+	chromedriver!GetHandleVerifier [0x775302+19742]
+	chromedriver!GetHandleVerifier [0x75e48f+28cf]
+	KERNEL32!BaseThreadInitThunk [0x75b07ba9+19]
+	ntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]
+	ntdll!RtlClearBits [0x76ecc32f+bf]
+</td><td><a href="C:\Users\Osstem\Desktop\cl\clse\e2e_automation\reports\screenshots\TC_SUITE_013_fail.png" target="_blank">📷</a></td></tr>
+</tbody>
+  </table>
+</body>
+</html>

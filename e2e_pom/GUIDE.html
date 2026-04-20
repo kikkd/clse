@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E2E POM 자동화 가이드</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3248;
+      --accent: #5c7cfa;
+      --accent2: #748ffc;
+      --green: #51cf66;
+      --yellow: #ffd43b;
+      --red: #ff6b6b;
+      --orange: #ff922b;
+      --purple: #cc5de8;
+      --cyan: #22d3ee;
+      --text: #e2e8f0;
+      --text-muted: #8892a4;
+      --code-bg: #0d1117;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* ── 레이아웃 ── */
+    .layout { display: flex; min-height: 100vh; }
+
+    /* ── 사이드바 ── */
+    .sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      padding: 0 20px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent2);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .sidebar-logo span { color: var(--text-muted); font-weight: 400; font-size: 12px; display: block; margin-top: 2px; }
+    .nav-section { padding: 8px 20px 4px; font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+    .nav-link {
+      display: block;
+      padding: 7px 20px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface2); border-left-color: var(--accent); }
+
+    /* ── 메인 콘텐츠 ── */
+    .main { flex: 1; padding: 48px 56px; max-width: 960px; }
+
+    h1 { font-size: 28px; font-weight: 700; color: var(--accent2); margin-bottom: 8px; }
+    h2 { font-size: 20px; font-weight: 700; color: var(--text); margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 15px; font-weight: 600; color: var(--accent2); margin: 28px 0 10px; }
+    h4 { font-size: 13px; font-weight: 600; color: var(--yellow); margin: 20px 0 8px; }
+    p { color: var(--text-muted); margin-bottom: 12px; }
+
+    /* ── 배지 ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+    .badge-blue  { background: rgba(92,124,250,.15); color: var(--accent2); border: 1px solid rgba(92,124,250,.3); }
+    .badge-green { background: rgba(81,207,102,.15); color: var(--green);   border: 1px solid rgba(81,207,102,.3); }
+    .badge-red   { background: rgba(255,107,107,.15);color: var(--red);     border: 1px solid rgba(255,107,107,.3); }
+    .badge-yellow{ background: rgba(255,212,59,.15); color: var(--yellow);  border: 1px solid rgba(255,212,59,.3); }
+    .badge-purple{ background: rgba(204,93,232,.15); color: var(--purple);  border: 1px solid rgba(204,93,232,.3); }
+    .badge-cyan  { background: rgba(34,211,238,.15); color: var(--cyan);    border: 1px solid rgba(34,211,238,.3); }
+
+    /* ── 코드 ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; }
+    p code, li code, td code {
+      background: var(--surface2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--cyan);
+    }
+
+    /* 구문 강조 */
+    .kw  { color: #c792ea; }   /* keyword */
+    .fn  { color: #82aaff; }   /* function */
+    .st  { color: #c3e88d; }   /* string */
+    .cm  { color: #546e7a; font-style: italic; } /* comment */
+    .nm  { color: #f78c6c; }   /* number / name */
+    .tp  { color: #ffcb6b; }   /* type */
+    .op  { color: #89ddff; }   /* operator / symbol */
+    .dc  { color: #80cbc4; }   /* decorator */
+
+    /* ── 테이블 ── */
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 24px; }
+    th { background: var(--surface2); color: var(--text); font-weight: 600; padding: 10px 14px; text-align: left; font-size: 12px; border: 1px solid var(--border); }
+    td { padding: 9px 14px; border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; vertical-align: top; }
+    td:first-child { color: var(--cyan); font-family: 'Cascadia Code', monospace; font-size: 12px; white-space: nowrap; }
+    tr:hover td { background: var(--surface2); }
+
+    /* ── 구조 트리 ── */
+    .tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 2;
+    }
+    .tree-dir   { color: var(--accent2); font-weight: 600; }
+    .tree-file  { color: var(--text); }
+    .tree-desc  { color: var(--text-muted); font-style: italic; }
+    .tree-new   { color: var(--green); }
+    .tree-keep  { color: var(--yellow); }
+
+    /* ── 카드 ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 12px 0;
+    }
+    .card-title { font-weight: 600; color: var(--accent2); margin-bottom: 8px; font-size: 14px; }
+
+    /* ── 흐름도 ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .flow-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      text-align: center;
+    }
+    .flow-arrow { color: var(--text-muted); font-size: 18px; }
+
+    /* ── callout ── */
+    .callout {
+      border-left: 3px solid;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .callout-info  { border-color: var(--accent); background: rgba(92,124,250,.08); }
+    .callout-tip   { border-color: var(--green);  background: rgba(81,207,102,.08); }
+    .callout-warn  { border-color: var(--yellow); background: rgba(255,212,59,.08); }
+    .callout strong { display: block; margin-bottom: 4px; }
+
+    /* ── 섹션 구분 ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 48px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .section-header h2 { margin: 0; border: none; padding: 0; }
+
+    .subtitle { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── 사이드바 ── -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      E2E POM Guide
+      <span>Page Object Model</span>
+    </div>
+    <div class="nav-section">시작하기</div>
+    <a class="nav-link" href="#overview">프로젝트 개요</a>
+    <a class="nav-link" href="#structure">폴더 구조</a>
+    <a class="nav-link" href="#flow">실행 흐름</a>
+    <a class="nav-link" href="#run">실행 방법</a>
+
+    <div class="nav-section">모듈 설명</div>
+    <a class="nav-link" href="#config">config/settings.py</a>
+    <a class="nav-link" href="#base">pages/base_page.py</a>
+    <a class="nav-link" href="#login">pages/login_page.py</a>
+    <a class="nav-link" href="#search">pages/search_page.py</a>
+    <a class="nav-link" href="#main">pages/main_page.py</a>
+
+    <div class="nav-section">테스트</div>
+    <a class="nav-link" href="#conftest">conftest.py</a>
+    <a class="nav-link" href="#test-login">test_login.py</a>
+    <a class="nav-link" href="#test-search">test_search.py</a>
+    <a class="nav-link" href="#test-main">test_main.py</a>
+
+    <div class="nav-section">가이드</div>
+    <a class="nav-link" href="#locator">Locator 종류</a>
+    <a class="nav-link" href="#new-page">새 페이지 추가</a>
+    <a class="nav-link" href="#exception">예외처리 패턴</a>
+  </nav>
+
+  <!-- ── 메인 ── -->
+  <main class="main">
+
+    <h1>E2E 자동화 가이드</h1>
+    <p class="subtitle">Page Object Model 기반 Selenium 테스트 프레임워크</p>
+
+    <!-- ════════════════════════════════════════ 개요 ══ -->
+    <div class="section-header" id="overview">
+      <div class="section-icon" style="background:rgba(92,124,250,.15)">📋</div>
+      <h2>프로젝트 개요</h2>
+    </div>
+
+    <p>엑셀 없이 Python 코드만으로 E2E 테스트를 작성하는 구조입니다. 역할이 세 레이어로 명확히 분리됩니다.</p>
+
+    <div class="flow">
+      <div class="flow-box" style="border-color:var(--purple);color:var(--purple)">
+        <div style="font-size:11px;color:var(--text-muted)">어디에 있나</div>
+        pages/
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--accent2);color:var(--accent2)">
+        <div style="font-size:11px;color:var(--text-muted)">무엇을 하나</div>
+        pages/ 메서드
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--green);color:var(--green)">
+        <div style="font-size:11px;color:var(--text-muted)">어떤 순서로</div>
+        tests/
+      </div>
+    </div>
+
+    <table>
+      <tr><th>레이어</th><th>파일</th><th>담당</th></tr>
+      <tr><td>설정</td><td>config/settings.py</td><td>URL, 타임아웃, 브라우저 옵션</td></tr>
+      <tr><td>공통기반</td><td>pages/base_page.py</td><td>click, type_text 등 Selenium 공통 메서드</td></tr>
+      <tr><td>페이지객체</td><td>pages/xxx_page.py</td><td>각 페이지 엘리먼트 locator + 동작 메서드</td></tr>
+      <tr><td>시나리오</td><td>tests/test_xxx.py</td><td>테스트 순서 + assert 검증</td></tr>
+      <tr><td>전역설정</td><td>tests/conftest.py</td><td>브라우저 생성/종료, 전역 예외처리</td></tr>
+    </table>
+
+    <!-- ════════════════════════════════════════ 구조 ══ -->
+    <div class="section-header" id="structure">
+      <div class="section-icon" style="background:rgba(255,212,59,.15)">📁</div>
+      <h2>폴더 구조</h2>
+    </div>
+
+    <div class="tree">
+      <div><span class="tree-dir">e2e_pom/</span></div>
+      <div>&nbsp;&nbsp;├── <span class="tree-dir">config/</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; └── <span class="tree-keep">settings.py</span> &nbsp;<span class="tree-desc">← URL, 타임아웃, 브라우저 옵션 설정</span></div>
+      <div>&nbsp;&nbsp;├── <span class="tree-dir">drivers/</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; └── <span class="tree-keep">browser_factory.py</span> &nbsp;<span class="tree-desc">← chrome/firefox/edge 드라이버 생성</span></div>
+      <div>&nbsp;&nbsp;├── <span class="tree-dir">pages/</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; ├── <span class="tree-keep">base_page.py</span> &nbsp;<span class="tree-desc">← 공통 메서드 (건드릴 필요 없음)</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; ├── <span class="tree-new">main_page.py</span> &nbsp;<span class="tree-desc">← GNB, 팝업 등 공통 UI</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; ├── <span class="tree-new">login_page.py</span> &nbsp;<span class="tree-desc">← 로그인 엘리먼트 + 동작</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; └── <span class="tree-new">search_page.py</span> &nbsp;<span class="tree-desc">← 검색 엘리먼트 + 동작</span></div>
+      <div>&nbsp;&nbsp;├── <span class="tree-dir">tests/</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; ├── <span class="tree-new">conftest.py</span> &nbsp;<span class="tree-desc">← 브라우저 fixture, 전역 예외처리</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; ├── <span class="tree-new">test_main.py</span> &nbsp;<span class="tree-desc">← 메인 페이지 시나리오</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; ├── <span class="tree-new">test_login.py</span> &nbsp;<span class="tree-desc">← 로그인 시나리오</span></div>
+      <div>&nbsp;&nbsp;│&nbsp;&nbsp; └── <span class="tree-new">test_search.py</span> &nbsp;<span class="tree-desc">← 검색 시나리오</span></div>
+      <div>&nbsp;&nbsp;├── <span class="tree-new">pytest.ini</span> &nbsp;<span class="tree-desc">← pytest 실행 설정</span></div>
+      <div>&nbsp;&nbsp;└── <span class="tree-dir">reports/</span> &nbsp;<span class="tree-desc">← 스크린샷, 리포트 저장</span></div>
+    </div>
+    <p style="margin-top:8px"><span class="badge badge-green">초록</span> 새로 추가 &nbsp; <span class="badge badge-yellow">노랑</span> 기존 유지</p>
+
+    <!-- ════════════════════════════════════════ 흐름 ══ -->
+    <div class="section-header" id="flow">
+      <div class="section-icon" style="background:rgba(81,207,102,.15)">⚡</div>
+      <h2>실행 흐름</h2>
+    </div>
+
+    <div class="flow" style="flex-direction:column;align-items:flex-start;gap:4px">
+      <div class="flow-box" style="width:100%;border-color:var(--accent)">1. pytest 실행</div>
+      <div style="padding-left:20px;color:var(--text-muted)">↓</div>
+      <div class="flow-box" style="width:100%;border-color:var(--purple)">2. conftest.py → 브라우저 생성 (fixture)</div>
+      <div style="padding-left:20px;color:var(--text-muted)">↓</div>
+      <div class="flow-box" style="width:100%;border-color:var(--yellow)">3. test_xxx.py → 시나리오 실행</div>
+      <div style="padding-left:20px;color:var(--text-muted)">↓</div>
+      <div class="flow-box" style="width:100%;border-color:var(--accent2)">4. xxx_page.py → 엘리먼트 찾아서 동작 수행</div>
+      <div style="padding-left:20px;color:var(--text-muted)">↓</div>
+      <div class="flow-box" style="width:100%;border-color:var(--cyan)">5. base_page.py → Selenium 실제 실행</div>
+      <div style="padding-left:20px;color:var(--text-muted)">↓</div>
+      <div class="flow-box" style="width:100%;border-color:var(--green)">6. assert 검증 → PASS / FAIL</div>
+      <div style="padding-left:20px;color:var(--text-muted)">↓</div>
+      <div class="flow-box" style="width:100%;border-color:var(--purple)">7. conftest.py → 브라우저 종료</div>
+    </div>
+
+    <!-- ════════════════════════════════════════ 실행 ══ -->
+    <div class="section-header" id="run">
+      <div class="section-icon" style="background:rgba(34,211,238,.15)">▶</div>
+      <h2>실행 방법</h2>
+    </div>
+
+    <pre><span class="cm"># 전체 테스트 실행</span>
+pytest
+
+<span class="cm"># 특정 파일만 실행</span>
+pytest tests/test_login.py
+
+<span class="cm"># 키워드 필터 (함수명에 "정상" 포함된 것만)</span>
+pytest <span class="op">-k</span> <span class="st">"정상"</span>
+
+<span class="cm"># 브라우저 지정</span>
+pytest <span class="op">--browser=</span>firefox
+
+<span class="cm"># URL 지정</span>
+pytest <span class="op">--url=</span>https://mysite.com
+
+<span class="cm"># HTML 리포트 생성 (pytest-html 설치 필요)</span>
+pytest <span class="op">--html=</span>reports/report.html
+
+<span class="cm"># 실패해도 전체 계속 실행</span>
+pytest <span class="op">--tb=</span>short</pre>
+
+    <!-- ════════════════════════════════════════ settings ══ -->
+    <div class="section-header" id="config">
+      <div class="section-icon" style="background:rgba(255,146,43,.15)">⚙</div>
+      <h2>config/settings.py</h2>
+    </div>
+    <p>브라우저 옵션, 타임아웃, 경로 등 전역 설정값을 관리합니다. 테스트 URL은 여기서 변경합니다.</p>
+
+    <pre><span class="nm">BASE_URL</span> <span class="op">=</span> <span class="st">"https://example.com"</span>  <span class="cm"># 기본 테스트 URL</span>
+
+<span class="nm">TIMEOUTS</span> <span class="op">=</span> {
+    <span class="st">"explicit"</span>:  <span class="nm">10</span>,   <span class="cm"># 엘리먼트 대기 최대 10초</span>
+    <span class="st">"page_load"</span>: <span class="nm">30</span>,   <span class="cm"># 페이지 로딩 최대 30초</span>
+}
+
+<span class="nm">PATHS</span> <span class="op">=</span> {
+    <span class="st">"screenshots"</span>: <span class="st">"reports/screenshots"</span>,
+}</pre>
+
+    <!-- ════════════════════════════════════════ base_page ══ -->
+    <div class="section-header" id="base">
+      <div class="section-icon" style="background:rgba(204,93,232,.15)">🔧</div>
+      <h2>pages/base_page.py</h2>
+    </div>
+    <p>모든 페이지 객체가 상속받는 기반 클래스입니다. <strong style="color:var(--yellow)">직접 수정할 필요 없습니다.</strong> 아래 메서드를 페이지 객체에서 <code>self.메서드명()</code>으로 호출합니다.</p>
+
+    <h3>네비게이션</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>navigate(url)</td><td>URL로 이동 후 페이지 로딩 완료까지 대기</td><td>None</td></tr>
+      <tr><td>go_back()</td><td>브라우저 뒤로 가기</td><td>None</td></tr>
+      <tr><td>go_forward()</td><td>브라우저 앞으로 가기</td><td>None</td></tr>
+      <tr><td>refresh()</td><td>페이지 새로 고침</td><td>None</td></tr>
+      <tr><td>get_current_url()</td><td>현재 페이지 URL 반환</td><td>str</td></tr>
+      <tr><td>get_title()</td><td>현재 페이지 타이틀 반환</td><td>str</td></tr>
+    </table>
+
+    <h3>엘리먼트 탐색</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>find(locator)</td><td>엘리먼트 1개 찾기. 없으면 예외 발생</td><td>WebElement</td></tr>
+      <tr><td>find_all(locator)</td><td>같은 locator의 엘리먼트 전부 찾기</td><td>List</td></tr>
+      <tr><td>find_nth(locator, nth)</td><td>같은 locator 중 nth번째 반환 (1부터 시작)</td><td>WebElement</td></tr>
+      <tr><td>is_present(locator)</td><td>엘리먼트 존재 여부 (DOM에 있으면 True)</td><td>bool</td></tr>
+      <tr><td>is_visible(locator)</td><td>엘리먼트가 화면에 보이는지 여부</td><td>bool</td></tr>
+    </table>
+
+    <div class="callout callout-info">
+      <strong>💡 is_present vs is_visible 차이</strong>
+      <code>is_present</code>: DOM에 존재하면 True (숨겨져 있어도 OK)<br>
+      <code>is_visible</code>: 실제 화면에 보여야 True (display:none이면 False)
+    </div>
+
+    <h3>클릭</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>click(locator)</td><td>엘리먼트 클릭. 실패 시 스크롤→JS클릭 자동 시도 (3단계 전략)</td><td>None</td></tr>
+      <tr><td>click_nth(locator, nth)</td><td>같은 locator 중 nth번째 클릭</td><td>None</td></tr>
+      <tr><td>js_click(locator)</td><td>JavaScript로 강제 클릭 (일반 클릭이 안 될 때)</td><td>None</td></tr>
+      <tr><td>double_click(locator)</td><td>더블 클릭</td><td>None</td></tr>
+      <tr><td>right_click(locator)</td><td>우클릭 (컨텍스트 메뉴)</td><td>None</td></tr>
+    </table>
+
+    <h3>텍스트 입력</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>type_text(locator, text)</td><td>텍스트 입력. 기본적으로 기존 내용 지우고 입력</td><td>None</td></tr>
+      <tr><td>type_text(locator, text, clear_first=False)</td><td>기존 내용 유지하고 이어서 입력</td><td>None</td></tr>
+      <tr><td>type_text(locator, text, nth=2)</td><td>nth번째 입력창에 입력</td><td>None</td></tr>
+      <tr><td>press_key(locator, "ENTER")</td><td>특수키 입력 (ENTER, TAB, ESCAPE 등)</td><td>None</td></tr>
+      <tr><td>clear_field(locator)</td><td>입력창 내용만 지우기</td><td>None</td></tr>
+    </table>
+
+    <h3>텍스트/속성 추출</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>get_text(locator)</td><td>엘리먼트 텍스트 반환</td><td>str</td></tr>
+      <tr><td>get_texts(locator)</td><td>같은 locator 엘리먼트들의 텍스트 리스트 반환</td><td>List[str]</td></tr>
+      <tr><td>get_attribute(locator, attr)</td><td>엘리먼트 속성값 반환 (예: "href", "value")</td><td>str</td></tr>
+    </table>
+
+    <h3>드롭다운</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>select_by_text(locator, text)</td><td>화면에 보이는 텍스트로 옵션 선택</td><td>None</td></tr>
+      <tr><td>select_by_value(locator, value)</td><td>HTML value 속성으로 옵션 선택</td><td>None</td></tr>
+      <tr><td>select_by_index(locator, index)</td><td>인덱스(0부터)로 옵션 선택</td><td>None</td></tr>
+    </table>
+
+    <h3>마우스/스크롤</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>hover(locator)</td><td>마우스를 엘리먼트 위로 이동 (hover 메뉴 펼치기)</td><td>None</td></tr>
+      <tr><td>scroll_to(locator)</td><td>특정 엘리먼트로 스크롤 이동</td><td>None</td></tr>
+      <tr><td>scroll_to_top()</td><td>페이지 최상단으로 스크롤</td><td>None</td></tr>
+      <tr><td>scroll_to_bottom()</td><td>페이지 최하단으로 스크롤</td><td>None</td></tr>
+    </table>
+
+    <h3>대기</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>wait_for_visible(locator)</td><td>엘리먼트가 화면에 보일 때까지 대기</td><td>WebElement</td></tr>
+      <tr><td>wait_for_invisible(locator)</td><td>엘리먼트가 사라질 때까지 대기</td><td>bool</td></tr>
+      <tr><td>wait_for_url_contains(text)</td><td>URL에 특정 문자열 포함될 때까지 대기</td><td>bool</td></tr>
+      <tr><td>wait_for_title_contains(text)</td><td>타이틀에 특정 문자열 포함될 때까지 대기</td><td>bool</td></tr>
+      <tr><td>sleep(seconds)</td><td>지정한 초만큼 강제 대기</td><td>None</td></tr>
+    </table>
+
+    <h3>Alert (브라우저 팝업)</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>accept_alert()</td><td>alert 확인 클릭 후 메시지 텍스트 반환</td><td>str</td></tr>
+      <tr><td>dismiss_alert()</td><td>alert 취소 클릭 후 메시지 텍스트 반환</td><td>str</td></tr>
+    </table>
+
+    <h3>기타</h3>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>screenshot(name)</td><td>스크린샷 저장 후 파일 경로 반환</td><td>str</td></tr>
+      <tr><td>switch_to_frame(locator)</td><td>iframe 안으로 전환</td><td>None</td></tr>
+      <tr><td>switch_to_default()</td><td>iframe에서 메인 페이지로 복귀</td><td>None</td></tr>
+      <tr><td>switch_to_window(index)</td><td>특정 탭/창으로 전환 (기본: 마지막 탭)</td><td>None</td></tr>
+      <tr><td>close_current_tab()</td><td>현재 탭 닫고 이전 탭으로 전환</td><td>None</td></tr>
+    </table>
+
+    <!-- ════════════════════════════════════════ login_page ══ -->
+    <div class="section-header" id="login">
+      <div class="section-icon" style="background:rgba(92,124,250,.15)">🔑</div>
+      <h2>pages/login_page.py</h2>
+    </div>
+    <p>로그인 페이지의 엘리먼트 locator와 동작 메서드를 정의합니다.</p>
+
+    <h4>엘리먼트 (locator)</h4>
+    <table>
+      <tr><th>변수명</th><th>기본값</th><th>설명</th></tr>
+      <tr><td>USERNAME</td><td>("id", "username")</td><td>아이디 입력창</td></tr>
+      <tr><td>PASSWORD</td><td>("id", "password")</td><td>비밀번호 입력창</td></tr>
+      <tr><td>LOGIN_BTN</td><td>("css", "button[type='submit']")</td><td>로그인 버튼</td></tr>
+      <tr><td>ERROR_MSG</td><td>("class", "error-message")</td><td>에러 메시지 영역</td></tr>
+      <tr><td>SUCCESS_MSG</td><td>("class", "success-message")</td><td>성공 메시지 영역</td></tr>
+    </table>
+
+    <h4>메서드</h4>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>login(username, password)</td><td>아이디·비밀번호 입력 후 로그인 버튼 클릭. 실패 시 스크린샷 저장</td><td>None</td></tr>
+      <tr><td>get_error_message()</td><td>에러 메시지 텍스트 반환. 메시지 없으면 빈 문자열</td><td>str</td></tr>
+      <tr><td>is_login_failed()</td><td>에러 메시지 존재 여부로 로그인 실패 확인</td><td>bool</td></tr>
+      <tr><td>is_login_success()</td><td>성공 메시지 존재 여부로 로그인 성공 확인</td><td>bool</td></tr>
+    </table>
+
+    <pre><span class="cm"># 사용 예시</span>
+<span class="nm">page</span> <span class="op">=</span> <span class="fn">LoginPage</span>(browser)
+<span class="nm">page</span>.<span class="fn">navigate</span>(<span class="st">"https://mysite.com/login"</span>)
+<span class="nm">page</span>.<span class="fn">login</span>(<span class="st">"admin"</span>, <span class="st">"admin123"</span>)
+
+<span class="kw">assert</span> <span class="st">"dashboard"</span> <span class="kw">in</span> <span class="nm">page</span>.<span class="fn">get_current_url</span>()</pre>
+
+    <!-- ════════════════════════════════════════ search_page ══ -->
+    <div class="section-header" id="search">
+      <div class="section-icon" style="background:rgba(81,207,102,.15)">🔍</div>
+      <h2>pages/search_page.py</h2>
+    </div>
+    <p>검색 페이지의 엘리먼트 locator와 동작 메서드를 정의합니다.</p>
+
+    <h4>엘리먼트 (locator)</h4>
+    <table>
+      <tr><th>변수명</th><th>기본값</th><th>설명</th></tr>
+      <tr><td>SEARCH_INPUT</td><td>("id", "search-box")</td><td>검색어 입력창</td></tr>
+      <tr><td>SEARCH_BTN</td><td>("css", "button[type='submit']")</td><td>검색 버튼</td></tr>
+      <tr><td>RESULT_ITEM</td><td>("class", "result-item")</td><td>검색 결과 항목</td></tr>
+      <tr><td>NO_RESULT_MSG</td><td>("class", "no-results")</td><td>결과 없음 메시지</td></tr>
+    </table>
+
+    <h4>메서드</h4>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>search(keyword)</td><td>검색어 입력 후 검색 버튼 클릭. 실패 시 스크린샷 저장</td><td>None</td></tr>
+      <tr><td>get_result_count()</td><td>검색 결과 개수 반환</td><td>int</td></tr>
+      <tr><td>has_results()</td><td>결과가 1개 이상이면 True</td><td>bool</td></tr>
+      <tr><td>get_result_texts()</td><td>결과 항목 텍스트 전체 리스트 반환</td><td>List[str]</td></tr>
+      <tr><td>is_no_result_shown()</td><td>결과 없음 메시지 존재 여부</td><td>bool</td></tr>
+    </table>
+
+    <!-- ════════════════════════════════════════ main_page ══ -->
+    <div class="section-header" id="main">
+      <div class="section-icon" style="background:rgba(255,146,43,.15)">🏠</div>
+      <h2>pages/main_page.py</h2>
+    </div>
+    <p>GNB, 팝업, 토스트 등 사이트 전역에서 공통으로 사용하는 UI를 관리합니다.</p>
+
+    <h4>엘리먼트 (locator)</h4>
+    <table>
+      <tr><th>변수명</th><th>기본값</th><th>설명</th></tr>
+      <tr><td>GNB_LOGIN_LINK</td><td>("partial_link_text", "로그인")</td><td>GNB 로그인 링크</td></tr>
+      <tr><td>GNB_LOGOUT_LINK</td><td>("partial_link_text", "로그아웃")</td><td>GNB 로그아웃 링크</td></tr>
+      <tr><td>GNB_MYPAGE_LINK</td><td>("partial_link_text", "마이페이지")</td><td>GNB 마이페이지 링크</td></tr>
+      <tr><td>POPUP_CLOSE_BTN</td><td>("class", "popup-close")</td><td>팝업 닫기 버튼</td></tr>
+      <tr><td>TOAST_MSG</td><td>("class", "toast-message")</td><td>토스트 메시지</td></tr>
+    </table>
+
+    <h4>메서드</h4>
+    <table>
+      <tr><th>메서드</th><th>설명</th><th>반환</th></tr>
+      <tr><td>go_to_login()</td><td>GNB 로그인 링크 클릭</td><td>None</td></tr>
+      <tr><td>logout()</td><td>GNB 로그아웃 클릭</td><td>None</td></tr>
+      <tr><td>is_logged_in()</td><td>로그아웃 링크 존재 여부로 로그인 상태 확인</td><td>bool</td></tr>
+      <tr><td>close_popup_if_present()</td><td>팝업이 있을 때만 닫기, 없으면 그냥 통과</td><td>None</td></tr>
+      <tr><td>get_toast_message()</td><td>토스트 메시지 텍스트 반환, 없으면 빈 문자열</td><td>str</td></tr>
+    </table>
+
+    <!-- ════════════════════════════════════════ conftest ══ -->
+    <div class="section-header" id="conftest">
+      <div class="section-icon" style="background:rgba(34,211,238,.15)">🔩</div>
+      <h2>tests/conftest.py</h2>
+    </div>
+    <p>pytest가 자동으로 읽는 전역 설정 파일입니다. fixture는 테스트 함수에 인자로 주입됩니다.</p>
+
+    <table>
+      <tr><th>fixture / 함수</th><th>scope</th><th>설명</th></tr>
+      <tr><td>pytest_addoption</td><td>-</td><td>--browser, --url 커맨드라인 옵션 등록</td></tr>
+      <tr><td>browser_name</td><td>session</td><td>--browser 값 읽기 (전체 세션 1회)</td></tr>
+      <tr><td>base_url</td><td>session</td><td>--url 값 읽기 (전체 세션 1회)</td></tr>
+      <tr><td>browser</td><td>function</td><td>테스트 함수마다 브라우저 새로 생성, 종료 후 자동 quit</td></tr>
+      <tr><td>dismiss_leftover_alert</td><td>function (autouse)</td><td>테스트 종료 후 남은 alert 자동 닫기. 모든 테스트에 자동 적용</td></tr>
+    </table>
+
+    <div class="callout callout-tip">
+      <strong>💡 scope 이란?</strong>
+      <code>session</code>: 전체 테스트 실행 중 1번만 실행<br>
+      <code>function</code>: 테스트 함수마다 실행 (기본값)<br>
+      <code>autouse=True</code>: 테스트 함수에서 명시하지 않아도 자동 적용
+    </div>
+
+    <!-- ════════════════════════════════════════ test files ══ -->
+    <div class="section-header" id="test-login">
+      <div class="section-icon" style="background:rgba(92,124,250,.15)">🧪</div>
+      <h2>tests/test_login.py</h2>
+    </div>
+
+    <table>
+      <tr><th>테스트 함수</th><th>검증 내용</th></tr>
+      <tr><td>test_정상_로그인</td><td>유효한 계정 로그인 후 URL에 "dashboard" 포함 여부</td></tr>
+      <tr><td>test_잘못된_비밀번호</td><td>틀린 비밀번호 입력 시 에러 메시지 노출 여부</td></tr>
+      <tr><td>test_아이디_미입력</td><td>아이디 비워두고 로그인 시 에러 메시지 노출 여부</td></tr>
+      <tr><td>test_비밀번호_미입력</td><td>비밀번호 비워두고 로그인 시 에러 메시지 노출 여부</td></tr>
+      <tr><td>test_에러_메시지_내용</td><td>에러 메시지 텍스트가 비어있지 않은지 확인</td></tr>
+    </table>
+
+    <div class="section-header" id="test-search">
+      <div class="section-icon" style="background:rgba(81,207,102,.15)">🧪</div>
+      <h2>tests/test_search.py</h2>
+    </div>
+
+    <table>
+      <tr><th>테스트 함수</th><th>검증 내용</th></tr>
+      <tr><td>test_키워드_검색_결과_존재</td><td>유효한 키워드 검색 시 결과 1개 이상 노출 여부</td></tr>
+      <tr><td>test_검색_결과_개수</td><td>검색 결과 개수가 1 이상인지 확인</td></tr>
+      <tr><td>test_빈_키워드_검색</td><td>빈 키워드 검색 시 결과 없음 처리 여부</td></tr>
+      <tr><td>test_존재하지_않는_키워드</td><td>없는 키워드 검색 시 결과 없음 처리 여부</td></tr>
+    </table>
+
+    <div class="section-header" id="test-main">
+      <div class="section-icon" style="background:rgba(255,146,43,.15)">🧪</div>
+      <h2>tests/test_main.py</h2>
+    </div>
+
+    <table>
+      <tr><th>테스트 함수</th><th>검증 내용</th></tr>
+      <tr><td>test_페이지_로딩</td><td>메인 페이지 타이틀 비어있지 않음, URL 확인</td></tr>
+      <tr><td>test_로그인_링크_존재</td><td>GNB에 로그인 링크 존재 여부</td></tr>
+      <tr><td>test_로그인_페이지_이동</td><td>로그인 링크 클릭 후 URL에 "login" 포함 여부</td></tr>
+    </table>
+
+    <!-- ════════════════════════════════════════ locator ══ -->
+    <div class="section-header" id="locator">
+      <div class="section-icon" style="background:rgba(255,212,59,.15)">📌</div>
+      <h2>Locator 종류</h2>
+    </div>
+    <p>엘리먼트를 찾는 방법입니다. <code>("locator_type", "locator_value")</code> 형태로 사용합니다.</p>
+
+    <table>
+      <tr><th>locator_type</th><th>설명</th><th>예시</th></tr>
+      <tr><td>id</td><td>HTML id 속성</td><td>("id", "login-btn")</td></tr>
+      <tr><td>name</td><td>HTML name 속성</td><td>("name", "username")</td></tr>
+      <tr><td>class</td><td>CSS class명 (단일)</td><td>("class", "btn-submit")</td></tr>
+      <tr><td>css</td><td>CSS 선택자</td><td>("css", "input[type='password']")</td></tr>
+      <tr><td>xpath</td><td>XPath 표현식</td><td>("xpath", "//button[@id='ok']")</td></tr>
+      <tr><td>tag</td><td>HTML 태그명</td><td>("tag", "h1")</td></tr>
+      <tr><td>link_text</td><td>링크 텍스트 완전 일치</td><td>("link_text", "로그인")</td></tr>
+      <tr><td>partial_link_text</td><td>링크 텍스트 부분 일치</td><td>("partial_link_text", "로그")</td></tr>
+    </table>
+
+    <div class="callout callout-tip">
+      <strong>💡 우선순위 추천</strong>
+      id &gt; name &gt; css &gt; xpath 순으로 사용하세요.<br>
+      id/name이 있으면 가장 빠르고 안정적입니다. xpath는 HTML 구조 변경에 취약하므로 마지막 수단으로 사용하세요.
+    </div>
+
+    <!-- ════════════════════════════════════════ 새 페이지 추가 ══ -->
+    <div class="section-header" id="new-page">
+      <div class="section-icon" style="background:rgba(81,207,102,.15)">➕</div>
+      <h2>새 페이지 추가하기</h2>
+    </div>
+
+    <p>예시: 상품 목록 페이지를 추가하는 경우</p>
+
+    <h4>1단계 — pages/product_page.py 생성</h4>
+    <pre><span class="kw">from</span> pages.base_page <span class="kw">import</span> BasePage
+
+<span class="kw">class</span> <span class="tp">ProductPage</span>(BasePage):
+
+    <span class="cm"># ── 엘리먼트 (실제 사이트 HTML에 맞게 수정) ──────────────────</span>
+    PRODUCT_ITEM  <span class="op">=</span> (<span class="st">"class"</span>, <span class="st">"product-card"</span>)
+    CART_BTN      <span class="op">=</span> (<span class="st">"id"</span>, <span class="st">"add-to-cart"</span>)
+    SORT_DROPDOWN <span class="op">=</span> (<span class="st">"id"</span>, <span class="st">"sort-select"</span>)
+    CART_COUNT    <span class="op">=</span> (<span class="st">"class"</span>, <span class="st">"cart-badge"</span>)
+
+    <span class="cm"># ── 동작 ──────────────────────────────────────────────────────</span>
+    <span class="kw">def</span> <span class="fn">add_first_product_to_cart</span>(<span class="nm">self</span>):
+        <span class="nm">self</span>.<span class="fn">click_nth</span>(<span class="nm">self</span>.CART_BTN, <span class="nm">1</span>)
+
+    <span class="kw">def</span> <span class="fn">sort_by</span>(<span class="nm">self</span>, option: <span class="tp">str</span>):
+        <span class="nm">self</span>.<span class="fn">select_by_text</span>(<span class="nm">self</span>.SORT_DROPDOWN, option)
+
+    <span class="kw">def</span> <span class="fn">get_product_count</span>(<span class="nm">self</span>) <span class="op">-&gt;</span> <span class="tp">int</span>:
+        <span class="kw">return</span> <span class="fn">len</span>(<span class="nm">self</span>.<span class="fn">find_all</span>(<span class="nm">self</span>.PRODUCT_ITEM))
+
+    <span class="kw">def</span> <span class="fn">get_cart_count</span>(<span class="nm">self</span>) <span class="op">-&gt;</span> <span class="tp">int</span>:
+        <span class="kw">return</span> <span class="fn">int</span>(<span class="nm">self</span>.<span class="fn">get_text</span>(<span class="nm">self</span>.CART_COUNT))</pre>
+
+    <h4>2단계 — tests/test_product.py 생성</h4>
+    <pre><span class="kw">import</span> pytest
+<span class="kw">from</span> pages.product_page <span class="kw">import</span> ProductPage
+
+<span class="nm">PRODUCT_URL</span> <span class="op">=</span> <span class="st">"https://mysite.com/products"</span>
+
+<span class="dc">@pytest.fixture</span>
+<span class="kw">def</span> <span class="fn">product_page</span>(browser):
+    page <span class="op">=</span> <span class="fn">ProductPage</span>(browser)
+    page.<span class="fn">navigate</span>(<span class="nm">PRODUCT_URL</span>)
+    <span class="kw">return</span> page
+
+<span class="kw">class</span> <span class="tp">TestProduct</span>:
+
+    <span class="kw">def</span> <span class="fn">test_상품목록_노출</span>(<span class="nm">self</span>, product_page):
+        <span class="kw">assert</span> product_page.<span class="fn">get_product_count</span>() <span class="op">&gt;</span> <span class="nm">0</span>
+
+    <span class="kw">def</span> <span class="fn">test_장바구니_담기</span>(<span class="nm">self</span>, product_page):
+        before <span class="op">=</span> product_page.<span class="fn">get_cart_count</span>()
+        product_page.<span class="fn">add_first_product_to_cart</span>()
+        after <span class="op">=</span> product_page.<span class="fn">get_cart_count</span>()
+        <span class="kw">assert</span> after <span class="op">==</span> before <span class="op">+</span> <span class="nm">1</span>, <span class="st">"장바구니 수량이 1 증가해야 함"</span></pre>
+
+    <!-- ════════════════════════════════════════ 예외처리 ══ -->
+    <div class="section-header" id="exception">
+      <div class="section-icon" style="background:rgba(255,107,107,.15)">🛡</div>
+      <h2>예외처리 패턴</h2>
+    </div>
+
+    <table>
+      <tr><th>예외 종류</th><th>처리 위치</th><th>방법</th></tr>
+      <tr><td>엘리먼트 못 찾음, 클릭 실패</td><td>pages/xxx_page.py</td><td>try/except → 스크린샷 → raise</td></tr>
+      <tr><td>검증 실패 (assert)</td><td>tests/test_xxx.py</td><td>AssertionError 메시지로 원인 명시</td></tr>
+      <tr><td>팝업, alert 공통 처리</td><td>tests/conftest.py</td><td>autouse fixture로 전역 적용</td></tr>
+    </table>
+
+    <h4>pages 예외처리 패턴</h4>
+    <pre><span class="kw">def</span> <span class="fn">login</span>(<span class="nm">self</span>, username, password):
+    <span class="kw">try</span>:
+        <span class="nm">self</span>.<span class="fn">type_text</span>(<span class="nm">self</span>.USERNAME, username)
+        <span class="nm">self</span>.<span class="fn">type_text</span>(<span class="nm">self</span>.PASSWORD, password)
+        <span class="nm">self</span>.<span class="fn">click</span>(<span class="nm">self</span>.LOGIN_BTN)
+    <span class="kw">except</span> <span class="tp">Exception</span> <span class="kw">as</span> e:
+        <span class="nm">self</span>.<span class="fn">screenshot</span>(<span class="st">"login_fail"</span>)  <span class="cm"># 실패 시 스크린샷</span>
+        <span class="kw">raise</span> <span class="tp">RuntimeError</span>(<span class="st">"로그인 실패: {}"</span>.<span class="fn">format</span>(e))</pre>
+
+    <h4>tests 예외처리 패턴</h4>
+    <pre><span class="kw">def</span> <span class="fn">test_로그인</span>(<span class="nm">self</span>, login_page):
+    <span class="kw">try</span>:
+        login_page.<span class="fn">login</span>(<span class="st">"admin"</span>, <span class="st">"admin123"</span>)
+        <span class="kw">assert</span> <span class="st">"dashboard"</span> <span class="kw">in</span> login_page.<span class="fn">get_current_url</span>()
+
+    <span class="kw">except</span> <span class="tp">AssertionError</span>:
+        login_page.<span class="fn">screenshot</span>(<span class="st">"assert_fail"</span>)
+        <span class="kw">raise</span>
+
+    <span class="kw">except</span> <span class="tp">Exception</span>:
+        login_page.<span class="fn">screenshot</span>(<span class="st">"unexpected_fail"</span>)
+        <span class="kw">raise</span></pre>
+
+    <div class="callout callout-warn">
+      <strong>⚠ 주의</strong>
+      예외를 처리한 후 반드시 <code>raise</code>로 다시 던져야 pytest가 FAIL로 기록합니다.<br>
+      <code>raise</code> 없이 except만 쓰면 테스트가 PASS로 처리되어 버그를 놓칩니다.
+    </div>
+
+    <hr class="divider" />
+    <p style="text-align:center;color:var(--text-muted);font-size:12px">E2E POM Automation Guide &nbsp;·&nbsp; 2026</p>
+
+  </main>
+</div>
+</body>
+</html>

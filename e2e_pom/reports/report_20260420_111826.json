@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 16.29,
+    "pass_rate": "100.0%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "메인 페이지 로딩 확인",
+      "status": "PASS",
+      "duration": 2.86,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_load.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:18:19.587124"
+    },
+    {
+      "test_id": "TC_SUITE_011",
+      "description": "아이디 입력",
+      "status": "PASS",
+      "duration": 1.33,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_011_input.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:18:20.917807"
+    },
+    {
+      "test_id": "TC_SUITE_012",
+      "description": "패스워드 입력",
+      "status": "PASS",
+      "duration": 1.32,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_012_input.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:18:22.237702"
+    },
+    {
+      "test_id": "TC_SUITE_013",
+      "description": "로그인 버튼 클릭",
+      "status": "PASS",
+      "duration": 1.74,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_013_click.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T11:18:23.984932"
+    }
+  ]
+}
