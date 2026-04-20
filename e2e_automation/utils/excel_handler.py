@@ -161,68 +161,101 @@ def create_sample_excel(file_path=None):
         # ── 대기 옵션 ─────────────────────────────────────────────────
         "wait_before",       # 액션 전 대기(초)
         "wait_after",        # 클릭 후 검증 전 대기(초) — click_and_verify 전용
+        # ── 탐색 제어 ─────────────────────────────────────────────────
+        "skip_navigate",     # yes/1/true → 해당 행에서 page.navigate() 생략
+                             # 이전 행의 페이지 상태를 유지해 연속 입력·클릭에 사용
     ]
     ws_suite.append(SUITE_COLS)
 
     # ── 샘플 데이터 (example.com 기준) ──────────────────────────────────────
     E = ""  # 빈 셀 단축
+    # skip_navigate 컬럼(마지막)까지 포함: 24개 값
     ws_suite.append([
         "TC_SUITE_001", "page_load", "메인 페이지 로딩 확인",
         E, E, E,  E, E, E, E,
         E, E, E, E, E, E, E,
-        E, E, E, E, E, E,
+        E, E, E, E, E, E, E,
     ])
     ws_suite.append([
         "TC_SUITE_002", "verify_present", "h1 엘리먼트 존재 확인",
         "tag", "h1", E,  E, E, E, E,
         E, E, E, E, E, E, E,
-        E, E, E, E, E, E,
+        E, E, E, E, E, E, E,
     ])
     ws_suite.append([
         "TC_SUITE_003", "verify_text", "h1 텍스트 일치 확인",
         "tag", "h1", E,  E, E, E, E,
         E, E, E, E, E, E, E,
-        "Example Domain", E, E, E, E, E,
+        "Example Domain", E, E, E, E, E, E,
     ])
     ws_suite.append([
         "TC_SUITE_004", "click", "More information 링크 클릭",
         "partial_link_text", "More information", E,  E, E, E, E,
         E, E, E, E, E, E, E,
-        E, "iana.org", E, E, E, E,
+        E, "iana.org", E, E, E, E, E,
     ])
     # ── click_and_verify 샘플 ─────────────────────────────────────────────
     ws_suite.append([
         "TC_SUITE_005", "click_and_verify", "버튼 클릭 후 성공 메시지 존재 확인",
-        "id", "submit-btn", E,          # 클릭 대상
-        "class", "success-msg", E, "present",  # 검증: 성공 메시지 있어야 함
+        "id", "submit-btn", E,
+        "class", "success-msg", E, "present",
         E, E, E, E, E, E, E,
-        E, E, E, E, "0.5", E,           # wait_after=0.5초
+        E, E, E, E, "0.5", E, E,        # wait_after=0.5초
     ])
     ws_suite.append([
         "TC_SUITE_006", "click_and_verify", "삭제 버튼 클릭 후 항목 사라짐 확인",
-        "class", "btn-delete", "1",     # 1번째 삭제 버튼 클릭
-        "class", "list-item", "1", "absent",  # 검증: 항목 없어야 함
+        "class", "btn-delete", "1",
+        "class", "list-item", "1", "absent",
         E, E, E, E, E, E, E,
-        E, E, E, E, "1", E,             # wait_after=1초
+        E, E, E, E, "1", E, E,          # wait_after=1초
     ])
     ws_suite.append([
         "TC_SUITE_007", "click_and_verify", "탭 클릭 후 탭 콘텐츠 텍스트 확인",
-        "class", "tab-menu", "2",       # 2번째 탭 클릭
-        "css", ".tab-content", E, "text",  # 검증: 텍스트 일치
+        "class", "tab-menu", "2",
+        "css", ".tab-content", E, "text",
         E, E, E, E, E, E, E,
-        "탭2 내용", E, E, E, "0.3", E,  # expected_text / wait_after
+        "탭2 내용", E, E, E, "0.3", E, E,
     ])
     ws_suite.append([
         "TC_SUITE_008", "input_and_submit", "폼 입력 후 제출",
         E, E, E,  E, E, E, E,
         "hello", "css", "input[type='text']", E, "css", "button[type='submit']", E,
-        E, E, E, E, E, E,
+        E, E, E, E, E, E, E,
     ])
     ws_suite.append([
         "TC_SUITE_009", "select", "드롭다운 텍스트로 선택",
         "id", "dropdown", E,  E, E, E, E,
         E, E, E, E, E, E, E,
-        E, E, "text", "옵션1", E, E,
+        E, E, "text", "옵션1", E, E, E,
+    ])
+    # ── 로그인 흐름 예시: input(텍스트만) → input(텍스트만) → click(버튼) ──────
+    # TC_SUITE_010: 로그인 페이지 접속 (navigate 수행)
+    ws_suite.append([
+        "TC_SUITE_010", "page_load", "로그인 페이지 접속",
+        E, E, E,  E, E, E, E,
+        E, E, E, E, E, E, E,
+        E, E, E, E, E, E, E,   # skip_navigate=빈값 → navigate 실행
+    ])
+    # TC_SUITE_011: 아이디 입력 (페이지 유지, navigate 생략)
+    ws_suite.append([
+        "TC_SUITE_011", "input", "아이디 입력",
+        "id", "username", E,  E, E, E, E,  # locator_type/locator_value로 입력 필드 지정
+        "admin", E, E, E, E, E, E,         # input_text
+        E, E, E, E, E, E, "yes",           # skip_navigate=yes → 페이지 유지
+    ])
+    # TC_SUITE_012: 패스워드 입력 (페이지 유지, navigate 생략)
+    ws_suite.append([
+        "TC_SUITE_012", "input", "패스워드 입력",
+        "id", "password", E,  E, E, E, E,
+        "admin123", E, E, E, E, E, E,
+        E, E, E, E, E, E, "yes",           # skip_navigate=yes → 페이지 유지
+    ])
+    # TC_SUITE_013: 로그인 버튼 클릭 (페이지 유지, navigate 생략)
+    ws_suite.append([
+        "TC_SUITE_013", "click", "로그인 버튼 클릭",
+        "id", "login-btn", E,  E, E, E, E,
+        E, E, E, E, E, E, E,
+        E, E, E, E, E, E, "yes",           # skip_navigate=yes → 페이지 유지
     ])
 
     wb.save(path)

@@ -32,7 +32,7 @@ def parse_args():
         """,
     )
     parser.add_argument("-u", "--url",     help="테스트 대상 URL")
-    parser.add_argument("-b", "--browser", default="chrome",
+    parser.add_argument("-b", "--browser", default=None,#default=None, 입력 시 브라우저 입력
                         choices=SUPPORTED_BROWSERS, help="브라우저 (기본: chrome)")
     parser.add_argument("-s", "--sheet",   default="tests", help="엑셀 시트 이름 (기본: tests)")
     parser.add_argument("-f", "--file",    help="엑셀 파일 경로 (기본: data/test_data.xlsx)")

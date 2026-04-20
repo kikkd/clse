@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E2E 자동화 프로젝트 사용 가이드</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f4f6f8; color: #2c3e50; line-height: 1.7; }
+
+    header {
+      background: linear-gradient(135deg, #2c3e50, #3498db);
+      color: #fff; padding: 36px 40px;
+    }
+    header h1 { font-size: 1.8em; margin-bottom: 6px; }
+    header p  { opacity: .75; font-size: .95em; }
+
+    nav {
+      background: #2c3e50; padding: 0 40px;
+      display: flex; flex-wrap: wrap; gap: 0;
+    }
+    nav a {
+      color: #bdc3c7; text-decoration: none;
+      padding: 12px 18px; font-size: .85em; display: block;
+      border-bottom: 3px solid transparent; transition: .2s;
+    }
+    nav a:hover { color: #fff; border-bottom-color: #3498db; }
+
+    main { max-width: 1200px; margin: 32px auto; padding: 0 24px 60px; }
+
+    section { margin-bottom: 48px; }
+    h2 {
+      font-size: 1.3em; color: #2c3e50;
+      border-left: 5px solid #3498db; padding-left: 14px;
+      margin-bottom: 20px; margin-top: 8px;
+    }
+    h3 { font-size: 1.05em; color: #34495e; margin: 24px 0 10px; padding-left: 4px; }
+    p  { margin-bottom: 12px; font-size: .93em; }
+
+    /* 카드 */
+    .card {
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.08);
+      padding: 24px 28px; margin-bottom: 20px;
+    }
+
+    /* 코드 블록 */
+    pre {
+      background: #1e272e; color: #dfe6e9;
+      border-radius: 8px; padding: 18px 22px;
+      font-size: .85em; overflow-x: auto;
+      margin: 12px 0; line-height: 1.6;
+    }
+    code { font-family: 'Consolas', 'D2Coding', monospace; }
+    pre code { color: #dfe6e9; }
+    .cm  { color: #636e72; }   /* comment */
+    .kw  { color: #74b9ff; }   /* keyword / option */
+    .str { color: #55efc4; }   /* string */
+    .num { color: #fdcb6e; }   /* number */
+
+    /* 테이블 */
+    .tbl-wrap { overflow-x: auto; margin: 12px 0; }
+    table { border-collapse: collapse; width: 100%; font-size: .83em; min-width: 600px; }
+    th {
+      background: #34495e; color: #fff;
+      padding: 9px 12px; text-align: left; white-space: nowrap;
+    }
+    td { padding: 8px 12px; border-bottom: 1px solid #ecf0f1; vertical-align: top; }
+    tr:hover td { background: #f8f9fa; }
+    tr:last-child td { border-bottom: none; }
+
+    /* 배지 */
+    .badge {
+      display: inline-block; padding: 2px 9px; border-radius: 12px;
+      font-size: .78em; font-weight: bold; white-space: nowrap;
+    }
+    .badge-blue   { background:#dbeafe; color:#1d4ed8; }
+    .badge-green  { background:#dcfce7; color:#166534; }
+    .badge-red    { background:#fee2e2; color:#991b1b; }
+    .badge-yellow { background:#fef9c3; color:#854d0e; }
+    .badge-gray   { background:#f1f5f9; color:#475569; }
+    .badge-purple { background:#ede9fe; color:#5b21b6; }
+    .badge-orange { background:#ffedd5; color:#9a3412; }
+
+    /* 알림 박스 */
+    .alert {
+      border-radius: 8px; padding: 14px 18px;
+      font-size: .88em; margin: 14px 0;
+      border-left: 5px solid;
+    }
+    .alert-blue   { background:#eff6ff; border-color:#3b82f6; color:#1e40af; }
+    .alert-green  { background:#f0fdf4; border-color:#22c55e; color:#166534; }
+    .alert-yellow { background:#fefce8; border-color:#eab308; color:#713f12; }
+
+    /* 구조 트리 */
+    .tree {
+      background: #fff; border-radius: 8px;
+      padding: 18px 22px; font-family: monospace;
+      font-size: .88em; line-height: 2;
+      box-shadow: 0 1px 6px rgba(0,0,0,.08);
+    }
+    .tree .dir  { color: #3498db; font-weight: bold; }
+    .tree .file { color: #2c3e50; }
+    .tree .desc { color: #7f8c8d; font-size:.82em; }
+
+    /* 그리드 */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:700px){ .grid2 { grid-template-columns: 1fr; } }
+
+    /* 시나리오 스텝 */
+    .steps { list-style: none; padding: 0; }
+    .steps li {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 12px; font-size: .9em;
+    }
+    .step-num {
+      background: #3498db; color: #fff;
+      border-radius: 50%; width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8em; font-weight: bold; flex-shrink: 0; margin-top: 2px;
+    }
+
+    footer {
+      text-align: center; padding: 24px;
+      font-size: .82em; color: #95a5a6;
+      border-top: 1px solid #ecf0f1; margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>E2E 자동화 프로젝트 사용 가이드</h1>
+  <p>Selenium 기반 · Python 3.8.9 · 크로스브라우저 · 엑셀 데이터 주도 테스트</p>
+</header>
+
+<nav>
+  <a href="#structure">프로젝트 구조</a>
+  <a href="#setup">최초 설정</a>
+  <a href="#run">실행 방법</a>
+  <a href="#sheets">엑셀 시트</a>
+  <a href="#columns">컬럼 설명</a>
+  <a href="#types">test_type</a>
+  <a href="#locator">locator 규칙</a>
+  <a href="#scenario">실전 시나리오</a>
+  <a href="#result">결과 확인</a>
+  <a href="#trouble">오류 해결</a>
+</nav>
+
+<main>
+
+<!-- ── 1. 프로젝트 구조 ─────────────────────────────────────── -->
+<section id="structure">
+  <h2>1. 프로젝트 구조</h2>
+  <div class="tree">
+    <div><span class="dir">e2e_automation/</span></div>
+    <div>&nbsp;&nbsp;├── <span class="file">main.py</span> <span class="desc">← 실행 진입점 (URL/브라우저/시트 입력)</span></div>
+    <div>&nbsp;&nbsp;├── <span class="file">requirements.txt</span> <span class="desc">← 패키지 목록</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">config/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">settings.py</span> <span class="desc">← 타임아웃, 브라우저 옵션 설정</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">elements/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">element_map.py</span> <span class="desc">← 공통 UI 엘리먼트 딕셔너리</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">drivers/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">browser_factory.py</span> <span class="desc">← Chrome/Firefox/Edge/Safari 드라이버</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">pages/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">base_page.py</span> <span class="desc">← 클릭/입력/대기 등 공통 동작</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">tests/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">test_runner.py</span> <span class="desc">← 테스트 실행 엔진</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">utils/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">excel_handler.py</span> <span class="desc">← 엑셀 읽기/샘플 생성</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">reporter.py</span> <span class="desc">← HTML/JSON 리포트 생성</span></div>
+    <div>&nbsp;&nbsp;├── <span class="dir">data/</span></div>
+    <div>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="file">test_data.xlsx</span> <span class="desc">← 테스트 입력 데이터</span></div>
+    <div>&nbsp;&nbsp;└── <span class="dir">reports/</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">report_*.html</span> <span class="desc">← 결과 리포트</span></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="dir">screenshots/</span> <span class="desc">← 스크린샷 자동 저장</span></div>
+  </div>
+</section>
+
+<!-- ── 2. 최초 설정 ─────────────────────────────────────────── -->
+<section id="setup">
+  <h2>2. 최초 설정</h2>
+  <div class="card">
+    <pre><code><span class="cm"># 1. 프로젝트 폴더로 이동</span>
+cd <span class="str">"C:\Users\whddl\OneDrive\바탕 화면\cl\e2e_automation"</span>
+
+<span class="cm"># 2. 패키지 설치 (venv 활성화 상태에서)</span>
+pip install -r requirements.txt
+
+<span class="cm"># 3. 샘플 엑셀 생성</span>
+python main.py --init</code></pre>
+    <div class="alert alert-green">샘플 엑셀 생성 후 <strong>data/test_data.xlsx</strong>를 Excel로 열어서 실제 테스트 데이터를 입력하세요.</div>
+  </div>
+</section>
+
+<!-- ── 3. 실행 방법 ─────────────────────────────────────────── -->
+<section id="run">
+  <h2>3. 실행 방법</h2>
+  <div class="card">
+    <pre><code><span class="cm"># 대화형 (프롬프트로 URL → 브라우저 → 시트 순서로 입력)</span>
+python main.py
+
+<span class="cm"># URL 직접 지정</span>
+python main.py <span class="kw">-u</span> https://example.com
+
+<span class="cm"># 브라우저 + 시트 지정</span>
+python main.py <span class="kw">-u</span> https://example.com <span class="kw">-b</span> chrome <span class="kw">-s</span> test_suite
+
+<span class="cm"># 통합 스위트 실행 (test_suite 시트 자동 선택)</span>
+python main.py <span class="kw">-u</span> https://example.com <span class="kw">--run-suite</span>
+
+<span class="cm"># Firefox로 실행</span>
+python main.py <span class="kw">-u</span> https://example.com <span class="kw">-b</span> firefox
+
+<span class="cm"># 시트 목록 확인</span>
+python main.py <span class="kw">--list-sheets</span>
+
+<span class="cm"># 샘플 엑셀 재생성</span>
+python main.py <span class="kw">--init</span></code></pre>
+
+    <h3>CLI 옵션 전체</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>옵션</th><th>기본값</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>-u</code></td><td>없음</td><td>테스트 대상 URL (필수)</td></tr>
+          <tr><td><code>-b</code></td><td>chrome</td><td>브라우저 (chrome / firefox / edge / safari)</td></tr>
+          <tr><td><code>-s</code></td><td>tests</td><td>엑셀 시트 이름</td></tr>
+          <tr><td><code>-f</code></td><td>data/test_data.xlsx</td><td>외부 엑셀 파일 경로</td></tr>
+          <tr><td><code>--run-suite</code></td><td>-</td><td>test_suite 시트 전체 실행</td></tr>
+          <tr><td><code>--init</code></td><td>-</td><td>샘플 엑셀 생성 후 종료</td></tr>
+          <tr><td><code>--list-sheets</code></td><td>-</td><td>엑셀 시트 목록 출력 후 종료</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── 4. 엑셀 시트 구성 ────────────────────────────────────── -->
+<section id="sheets">
+  <h2>4. 엑셀 시트 구성</h2>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>시트명</th><th>용도</th><th>권장</th></tr></thead>
+        <tbody>
+          <tr><td><code>tests</code></td><td>페이지 로딩 확인</td><td></td></tr>
+          <tr><td><code>click_tests</code></td><td>클릭 테스트</td><td></td></tr>
+          <tr><td><code>form_tests</code></td><td>입력/제출 테스트</td><td></td></tr>
+          <tr><td><strong>test_suite</strong></td><td>모든 타입 통합 (한 시트에서 전체 시나리오 실행)</td><td><span class="badge badge-green">권장</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert alert-blue"><strong>test_suite 시트</strong>를 사용하면 페이지 로딩 → 클릭 → 입력 → 텍스트 확인을 한 시트에서 순서대로 실행할 수 있습니다.</div>
+  </div>
+</section>
+
+<!-- ── 5. 컬럼 설명 ─────────────────────────────────────────── -->
+<section id="columns">
+  <h2>5. test_suite 시트 — 전체 컬럼 설명</h2>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>컬럼명</th><th>필수</th><th>설명</th></tr></thead>
+        <tbody>
+          <tr><td><code>test_id</code></td><td><span class="badge badge-red">필수</span></td><td>테스트 케이스 ID (예: TC_001)</td></tr>
+          <tr><td><code>test_type</code></td><td><span class="badge badge-red">필수</span></td><td>실행할 테스트 타입 (아래 test_type 표 참고)</td></tr>
+          <tr><td><code>description</code></td><td><span class="badge badge-yellow">권장</span></td><td>테스트 설명 (리포트에 표시)</td></tr>
+          <tr><td colspan="3" style="background:#f8f9fa;font-weight:bold;color:#3498db">클릭 대상 엘리먼트</td></tr>
+          <tr><td><code>locator_type</code></td><td><span class="badge badge-gray">조건부</span></td><td>id / class / css / xpath / name / partial_link_text / tag</td></tr>
+          <tr><td><code>locator_value</code></td><td><span class="badge badge-gray">조건부</span></td><td>엘리먼트 식별값</td></tr>
+          <tr><td><code>nth</code></td><td><span class="badge badge-gray">선택</span></td><td>n번째 엘리먼트 (1부터, 비워두면 첫 번째)</td></tr>
+          <tr><td colspan="3" style="background:#f8f9fa;font-weight:bold;color:#3498db">click_and_verify 전용 — 클릭 후 확인할 엘리먼트</td></tr>
+          <tr><td><code>verify_locator_type</code></td><td><span class="badge badge-gray">조건부</span></td><td>확인 대상 locator_type</td></tr>
+          <tr><td><code>verify_locator_value</code></td><td><span class="badge badge-gray">조건부</span></td><td>확인 대상 locator_value</td></tr>
+          <tr><td><code>verify_nth</code></td><td><span class="badge badge-gray">선택</span></td><td>확인 대상 nth</td></tr>
+          <tr><td><code>verify_expect</code></td><td><span class="badge badge-gray">조건부</span></td><td>present(기본) / absent / text</td></tr>
+          <tr><td colspan="3" style="background:#f8f9fa;font-weight:bold;color:#3498db">input / input_and_submit 전용</td></tr>
+          <tr><td><code>input_text</code></td><td><span class="badge badge-gray">조건부</span></td><td>입력할 텍스트</td></tr>
+          <tr><td><code>input_locator_type</code></td><td><span class="badge badge-gray">조건부</span></td><td>입력 필드 locator_type</td></tr>
+          <tr><td><code>input_locator_value</code></td><td><span class="badge badge-gray">조건부</span></td><td>입력 필드 locator_value</td></tr>
+          <tr><td><code>input_nth</code></td><td><span class="badge badge-gray">선택</span></td><td>입력 필드 nth</td></tr>
+          <tr><td><code>submit_locator_type</code></td><td><span class="badge badge-gray">조건부</span></td><td>제출 버튼 locator_type</td></tr>
+          <tr><td><code>submit_locator_value</code></td><td><span class="badge badge-gray">조건부</span></td><td>제출 버튼 locator_value</td></tr>
+          <tr><td><code>submit_nth</code></td><td><span class="badge badge-gray">선택</span></td><td>제출 버튼 nth</td></tr>
+          <tr><td colspan="3" style="background:#f8f9fa;font-weight:bold;color:#3498db">검증 전용</td></tr>
+          <tr><td><code>expected_text</code></td><td><span class="badge badge-gray">조건부</span></td><td>텍스트 비교 예상값 (verify_text / click_and_verify 텍스트 모드)</td></tr>
+          <tr><td><code>expected_url_contains</code></td><td><span class="badge badge-gray">선택</span></td><td>URL에 포함되어야 할 문자열</td></tr>
+          <tr><td colspan="3" style="background:#f8f9fa;font-weight:bold;color:#3498db">select 전용</td></tr>
+          <tr><td><code>select_by</code></td><td><span class="badge badge-gray">조건부</span></td><td>text / value / index</td></tr>
+          <tr><td><code>select_value</code></td><td><span class="badge badge-gray">조건부</span></td><td>선택할 옵션값</td></tr>
+          <tr><td colspan="3" style="background:#f8f9fa;font-weight:bold;color:#3498db">대기 옵션</td></tr>
+          <tr><td><code>wait_before</code></td><td><span class="badge badge-gray">선택</span></td><td>액션 전 대기(초) — 페이지 로딩 후 추가 대기 시</td></tr>
+          <tr><td><code>wait_after</code></td><td><span class="badge badge-gray">선택</span></td><td>클릭 후 검증 전 대기(초) — 팝업/애니메이션 대기 시</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── 6. test_type ─────────────────────────────────────────── -->
+<section id="types">
+  <h2>6. test_type 종류 및 사용법</h2>
+
+  <!-- page_load -->
+  <div class="card">
+    <h3><span class="badge badge-blue">page_load</span> &nbsp;페이지 접속 확인</h3>
+    <p>URL에 접속하여 타이틀이 존재하는지, URL이 예상 값을 포함하는지 확인합니다.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>description</th><th>expected_url_contains</th></tr></thead>
+      <tbody>
+        <tr><td>TC_001</td><td>page_load</td><td>메인 페이지 로딩</td><td></td></tr>
+        <tr><td>TC_002</td><td>page_load</td><td>로그인 페이지 확인</td><td>/login</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- click -->
+  <div class="card">
+    <h3><span class="badge badge-blue">click</span> &nbsp;엘리먼트 클릭</h3>
+    <p>지정한 엘리먼트를 클릭합니다. 자동으로 hover → scroll → JS클릭 3단계를 시도합니다.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>locator_type</th><th>locator_value</th><th>nth</th><th>expected_url_contains</th><th>wait_before</th></tr></thead>
+      <tbody>
+        <tr><td>TC_003</td><td>click</td><td>id</td><td>login-btn</td><td></td><td>/home</td><td></td></tr>
+        <tr><td>TC_004</td><td>click</td><td>class</td><td>menu-item</td><td>2</td><td></td><td>1</td></tr>
+        <tr><td>TC_005</td><td>click</td><td>css</td><td>h2.subtitle</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- click_and_verify -->
+  <div class="card">
+    <h3><span class="badge badge-purple">click_and_verify</span> &nbsp;클릭 후 엘리먼트 확인</h3>
+    <p>엘리먼트를 클릭한 뒤, 다른 엘리먼트의 존재/부재/텍스트를 확인합니다. 팝업 확인에 주로 사용합니다.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>locator_type</th><th>locator_value</th><th>verify_locator_type</th><th>verify_locator_value</th><th>verify_expect</th><th>expected_text</th><th>wait_after</th></tr></thead>
+      <tbody>
+        <tr><td>TC_006</td><td>click_and_verify</td><td>class</td><td>open-popup</td><td>css</td><td>h2.popup-title</td><td>text</td><td>주문완료</td><td>1</td></tr>
+        <tr><td>TC_007</td><td>click_and_verify</td><td>id</td><td>add-btn</td><td>class</td><td>success-msg</td><td>present</td><td></td><td>0.5</td></tr>
+        <tr><td>TC_008</td><td>click_and_verify</td><td>class</td><td>del-btn</td><td>class</td><td>list-item</td><td>absent</td><td></td><td>1</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tbl-wrap" style="margin-top:14px"><table>
+      <thead><tr><th>verify_expect 값</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-green">present</span></td><td>클릭 후 엘리먼트가 <strong>있으면</strong> PASS (기본값)</td></tr>
+        <tr><td><span class="badge badge-red">absent</span></td><td>클릭 후 엘리먼트가 <strong>없으면</strong> PASS</td></tr>
+        <tr><td><span class="badge badge-blue">text</span></td><td>클릭 후 엘리먼트 텍스트가 expected_text와 <strong>일치하면</strong> PASS</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- input -->
+  <div class="card">
+    <h3><span class="badge badge-blue">input</span> &nbsp;텍스트 입력 (제출 없음)</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>locator_type</th><th>locator_value</th><th>nth</th><th>input_text</th></tr></thead>
+      <tbody>
+        <tr><td>TC_009</td><td>input</td><td>id</td><td>search-box</td><td></td><td>selenium</td></tr>
+        <tr><td>TC_010</td><td>input</td><td>class</td><td>form-field</td><td>2</td><td>hello</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- input_and_submit -->
+  <div class="card">
+    <h3><span class="badge badge-blue">input_and_submit</span> &nbsp;입력 후 버튼 제출</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>input_locator_type</th><th>input_locator_value</th><th>input_nth</th><th>input_text</th><th>submit_locator_type</th><th>submit_locator_value</th><th>submit_nth</th><th>expected_url_contains</th></tr></thead>
+      <tbody>
+        <tr><td>TC_011</td><td>input_and_submit</td><td>id</td><td>username</td><td></td><td>admin</td><td>css</td><td>button[type='submit']</td><td></td><td>/home</td></tr>
+        <tr><td>TC_012</td><td>input_and_submit</td><td>class</td><td>input-box</td><td>2</td><td>test</td><td>class</td><td>btn-ok</td><td>2</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- verify_text -->
+  <div class="card">
+    <h3><span class="badge badge-green">verify_text</span> &nbsp;텍스트 일치 확인</h3>
+    <p>Vue/React 동적 렌더링 환경에서 <code>element.text</code>가 빈 값이면 자동으로 JS <code>textContent</code>로 재시도합니다.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>locator_type</th><th>locator_value</th><th>nth</th><th>expected_text</th></tr></thead>
+      <tbody>
+        <tr><td>TC_013</td><td>verify_text</td><td>css</td><td>h2.subtitle</td><td></td><td>[부산] 치과위생사를 모십니다.</td></tr>
+        <tr><td>TC_014</td><td>verify_text</td><td>css</td><td>h2.subtitle</td><td>2</td><td>[서울] 두 번째 공고</td></tr>
+        <tr><td>TC_015</td><td>verify_text</td><td>tag</td><td>h1</td><td></td><td>Example Domain</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- verify_present / verify_url / select -->
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="badge badge-green">verify_present</span> &nbsp;엘리먼트 존재 확인</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>test_id</th><th>test_type</th><th>locator_type</th><th>locator_value</th></tr></thead>
+        <tbody>
+          <tr><td>TC_016</td><td>verify_present</td><td>id</td><td>login-btn</td></tr>
+          <tr><td>TC_017</td><td>verify_present</td><td>css</td><td>.logo</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3><span class="badge badge-green">verify_url</span> &nbsp;URL 확인</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>test_id</th><th>test_type</th><th>expected_url_contains</th></tr></thead>
+        <tbody>
+          <tr><td>TC_018</td><td>verify_url</td><td>/dashboard</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="badge badge-orange">select</span> &nbsp;드롭다운 선택</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>locator_type</th><th>locator_value</th><th>select_by</th><th>select_value</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>TC_019</td><td>select</td><td>id</td><td>country</td><td>text</td><td>대한민국</td><td>텍스트로 선택</td></tr>
+        <tr><td>TC_020</td><td>select</td><td>id</td><td>size</td><td>value</td><td>lg</td><td>value 속성으로 선택</td></tr>
+        <tr><td>TC_021</td><td>select</td><td>id</td><td>qty</td><td>index</td><td>2</td><td>3번째 옵션 선택 (0부터 시작)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ── 7. locator 규칙 ──────────────────────────────────────── -->
+<section id="locator">
+  <h2>7. locator_type 입력 규칙</h2>
+  <div class="card">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>locator_type</th><th>locator_value 예시</th><th>주의사항</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>login-btn</td><td><code>#</code> 없이 id명만 입력</td></tr>
+        <tr><td><code>class</code></td><td>btn-submit</td><td><code>.</code> 없이 class명만 입력. 공백 포함 시 자동으로 CSS 변환</td></tr>
+        <tr><td><code>css</code></td><td>h2.subtitle</td><td><code>.</code> <code>#</code> 포함하여 입력</td></tr>
+        <tr><td><code>css</code></td><td>input[type='text']</td><td>속성 선택자 가능</td></tr>
+        <tr><td><code>css</code></td><td>h2.class-a.class-b</td><td>클래스 두 개 동시 지정</td></tr>
+        <tr><td><code>xpath</code></td><td>//h2[@class='subtitle']</td><td>XPath 전체 표현식 입력</td></tr>
+        <tr><td><code>xpath</code></td><td>//h2[contains(@class,'sub')]</td><td>부분 클래스 포함 검색</td></tr>
+        <tr><td><code>name</code></td><td>username</td><td>name 속성값</td></tr>
+        <tr><td><code>partial_link_text</code></td><td>로그인</td><td>링크 텍스트 일부</td></tr>
+        <tr><td><code>tag</code></td><td>h1</td><td>태그명만 입력</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>nth 사용 규칙</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>nth 값</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td>비워두기 또는 1</td><td>첫 번째 엘리먼트 (기본값)</td></tr>
+        <tr><td>2</td><td>두 번째 엘리먼트</td></tr>
+        <tr><td>3</td><td>세 번째 엘리먼트</td></tr>
+      </tbody>
+    </table></div>
+    <div class="alert alert-yellow">같은 class/css 엘리먼트가 여러 개일 때 몇 번째인지 지정합니다.</div>
+  </div>
+</section>
+
+<!-- ── 8. 실전 시나리오 ─────────────────────────────────────── -->
+<section id="scenario">
+  <h2>8. 실전 시나리오 예시</h2>
+  <div class="card">
+    <h3>로그인 → 메뉴 클릭 → 팝업 h2 텍스트 확인</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>test_id</th><th>test_type</th><th>description</th><th>locator_type</th><th>locator_value</th><th>input_locator_type</th><th>input_locator_value</th><th>input_text</th><th>submit_locator_type</th><th>submit_locator_value</th><th>verify_locator_type</th><th>verify_locator_value</th><th>verify_expect</th><th>expected_text</th><th>wait_after</th></tr></thead>
+      <tbody>
+        <tr><td>TC_001</td><td>page_load</td><td>메인 접속</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>TC_002</td><td>input_and_submit</td><td>로그인</td><td></td><td></td><td>id</td><td>username</td><td>admin</td><td>css</td><td>button[type='submit']</td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>TC_003</td><td>verify_url</td><td>대시보드 확인</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>TC_004</td><td>verify_present</td><td>메뉴 존재 확인</td><td>class</td><td>nav-menu</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>TC_005</td><td>click_and_verify</td><td>팝업 h2 텍스트 확인</td><td>class</td><td>open-popup</td><td></td><td></td><td></td><td></td><td></td><td>css</td><td>h2.popup-title</td><td>text</td><td>팝업 제목</td><td>1</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ── 9. 결과 확인 ─────────────────────────────────────────── -->
+<section id="result">
+  <h2>9. 결과 확인</h2>
+  <div class="card">
+    <pre><code><span class="cm"># HTML 리포트 브라우저로 열기</span>
+start reports\report_*.html</code></pre>
+    <div class="tree" style="margin-top:14px">
+      <div><span class="dir">reports/</span></div>
+      <div>&nbsp;&nbsp;├── <span class="file">report_20260419_143022.html</span> <span class="desc">← 브라우저로 열면 결과 한눈에 확인</span></div>
+      <div>&nbsp;&nbsp;├── <span class="file">report_20260419_143022.json</span> <span class="desc">← 자동화/연동용</span></div>
+      <div>&nbsp;&nbsp;└── <span class="dir">screenshots/</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">TC_001_load.png</span> <span class="desc">← PASS 스크린샷 (클릭 1초 후 자동 캡처)</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">TC_005_fail.png</span> <span class="desc">← FAIL 스크린샷 + 에러 메시지 기록</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 10. 오류 해결 ────────────────────────────────────────── -->
+<section id="trouble">
+  <h2>10. 자주 발생하는 오류</h2>
+  <div class="card">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>ModuleNotFoundError</td>
+          <td>패키지 미설치</td>
+          <td><code>pip install -r requirements.txt</code></td>
+        </tr>
+        <tr>
+          <td>FileNotFoundError</td>
+          <td>엑셀 파일 없음</td>
+          <td><code>python main.py --init</code></td>
+        </tr>
+        <tr>
+          <td>FAIL — 엘리먼트 못 찾음</td>
+          <td>locator_value 오타 또는 잘못된 locator_type</td>
+          <td>브라우저 개발자도구(F12) → 해당 엘리먼트 우클릭 → 검사로 확인</td>
+        </tr>
+        <tr>
+          <td>FAIL — 텍스트 불일치</td>
+          <td>공백·줄바꿈 차이</td>
+          <td>리포트 에러 메시지의 <strong>실제값</strong>을 복사해서 expected_text에 붙여넣기</td>
+        </tr>
+        <tr>
+          <td>FAIL — 텍스트가 빈 값</td>
+          <td>Vue/React 동적 렌더링</td>
+          <td><code>wait_before</code> / <code>wait_after</code> 값 늘리기 (1~2초). 자동으로 JS textContent 재시도함</td>
+        </tr>
+        <tr>
+          <td>팝업 확인 FAIL</td>
+          <td>팝업 뜨는 시간 부족</td>
+          <td><code>wait_after</code> 값 늘리기 (1~2초)</td>
+        </tr>
+        <tr>
+          <td>클릭이 안 됨</td>
+          <td>화면 밖 엘리먼트 또는 overlay</td>
+          <td>자동으로 hover → scroll → JS클릭 3단계 시도. <code>wait_before</code> 추가</td>
+        </tr>
+        <tr>
+          <td>WebDriverException</td>
+          <td>브라우저 드라이버 문제</td>
+          <td>인터넷 연결 확인 (webdriver-manager가 자동 다운로드)</td>
+        </tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  E2E 자동화 프로젝트 &nbsp;·&nbsp; Python 3.8.9 &nbsp;·&nbsp; Selenium 4.x &nbsp;·&nbsp; pandas 2.0.x
+</footer>
+
+</body>
+</html>

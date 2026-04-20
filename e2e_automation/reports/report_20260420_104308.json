@@ -1,0 +1,36 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 27.85,
+    "pass_rate": "50.0%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "메인 페이지 로딩 확인",
+      "status": "PASS",
+      "duration": 2.71,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_load.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:42:52.486541"
+    },
+    {
+      "test_id": "TC_SUITE_002",
+      "description": "버튼 클릭 후 성공 메시지 존재 확인",
+      "status": "FAIL",
+      "duration": 13.8,
+      "error_msg": "Elements not found: ('class', 'logo')",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_002_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:43:06.289762"
+    }
+  ]
+}
