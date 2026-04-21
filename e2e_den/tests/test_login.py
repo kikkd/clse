@@ -90,5 +90,5 @@ class TestLogin:
         """비로그인 상태에서 map 페이지에 로그인 버튼이 노출되어야 함."""
         map_page = MapPage(browser)
         map_page.navigate(MAP_URL)
-        assert map_page.is_present(MapPage.LOGIN_BTN, timeout=10), \
+        assert map_page.is_present(MapPage.LOGIN_BTN, timeout=9), \
             "비로그인 상태에서 map 페이지에 로그인 버튼이 있어야 함"
