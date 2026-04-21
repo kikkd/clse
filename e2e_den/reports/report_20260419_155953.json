@@ -1,0 +1,36 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 12.29,
+    "pass_rate": "50.0%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "메인 페이지 로딩 확인",
+      "status": "PASS",
+      "duration": 3.48,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\whddl\\OneDrive\\바탕 화면\\cl\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_load.png",
+      "url": "https://job.denall.com/hire-announce-main",
+      "browser": "chrome",
+      "timestamp": "2026-04-19T15:59:47.541247"
+    },
+    {
+      "test_id": "TC_SUITE_005",
+      "description": "버튼 클릭 후 성공 메시지 존재 확인",
+      "status": "FAIL",
+      "duration": 3.18,
+      "error_msg": "텍스트 불일치 | 예상: '[부산] [치과위생사] 치과위생사선생님을 모십니다.' | 실제: ''",
+      "screenshot": "C:\\Users\\whddl\\OneDrive\\바탕 화면\\cl\\e2e_automation\\reports\\screenshots\\TC_SUITE_005_fail.png",
+      "url": "https://job.denall.com/hire-announce-main",
+      "browser": "chrome",
+      "timestamp": "2026-04-19T15:59:50.724208"
+    }
+  ]
+}

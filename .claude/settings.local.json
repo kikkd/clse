@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp *)",
+      "WebFetch(domain:osstem.com)",
+      "WebFetch(domain:member.denall.com)"
+    ]
+  }
+}

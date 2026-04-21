@@ -1,0 +1,113 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 9,
+    "passed": 1,
+    "failed": 8,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 102.01,
+    "pass_rate": "11.1%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "메인 페이지 로딩 확인",
+      "status": "PASS",
+      "duration": 2.86,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_load.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:52:55.720087"
+    },
+    {
+      "test_id": "TC_SUITE_002",
+      "description": "h1 엘리먼트 존재 확인",
+      "status": "FAIL",
+      "duration": 6.61,
+      "error_msg": "엘리먼트 없음 | [tag=h1]",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_002_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:53:02.329668"
+    },
+    {
+      "test_id": "TC_SUITE_003",
+      "description": "h1 텍스트 일치 확인",
+      "status": "FAIL",
+      "duration": 11.63,
+      "error_msg": "Message: Element not found: ('tag name', 'h1')\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_003_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:53:13.958985"
+    },
+    {
+      "test_id": "TC_SUITE_004",
+      "description": "More information 링크 클릭",
+      "status": "FAIL",
+      "duration": 11.75,
+      "error_msg": "[More information] 클릭 실패 | locator=('partial link text', 'More information') | 사유=Message: \nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_004_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:53:25.713946"
+    },
+    {
+      "test_id": "TC_SUITE_005",
+      "description": "버튼 클릭 후 성공 메시지 존재 확인",
+      "status": "FAIL",
+      "duration": 12.15,
+      "error_msg": "클릭 실패 | locator=('id', 'submit-btn') | 사유=Message: \nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_005_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:53:37.859400"
+    },
+    {
+      "test_id": "TC_SUITE_006",
+      "description": "삭제 버튼 클릭 후 항목 사라짐 확인",
+      "status": "FAIL",
+      "duration": 12.64,
+      "error_msg": "Elements not found: ('class', 'btn-delete')",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_006_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:53:50.503843"
+    },
+    {
+      "test_id": "TC_SUITE_007",
+      "description": "탭 클릭 후 탭 콘텐츠 텍스트 확인",
+      "status": "FAIL",
+      "duration": 11.96,
+      "error_msg": "Elements not found: ('class', 'tab-menu')",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_007_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:54:02.467647"
+    },
+    {
+      "test_id": "TC_SUITE_008",
+      "description": "폼 입력 후 제출",
+      "status": "FAIL",
+      "duration": 11.76,
+      "error_msg": "클릭 실패 | locator=('css selector', \"button[type='submit']\") | 사유=Message: \nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_008_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:54:14.224272"
+    },
+    {
+      "test_id": "TC_SUITE_009",
+      "description": "드롭다운 텍스트로 선택",
+      "status": "FAIL",
+      "duration": 11.62,
+      "error_msg": "Message: Element not found: ('id', 'dropdown')\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x76c733+10b73]\n\tchromedriver!GetHandleVerifier [0x76c864+10ca4]\n\tchromedriver!(No symbol) [0x542100]\n\tchromedriver!(No symbol) [0x58acba]\n\tchromedriver!(No symbol) [0x58af5b]\n\tchromedriver!(No symbol) [0x5cd9c2]\n\tchromedriver!(No symbol) [0x5adc64]\n\tchromedriver!(No symbol) [0x5cb1f4]\n\tchromedriver!(No symbol) [0x5ad9b6]\n\tchromedriver!(No symbol) [0x580339]\n\tchromedriver!(No symbol) [0x5810f4]\n\tchromedriver!GetHandleVerifier [0x9cfe04+274244]\n\tchromedriver!GetHandleVerifier [0x9cb459+26f899]\n\tchromedriver!GetHandleVerifier [0x9e9bd5+28e015]\n\tchromedriver!GetHandleVerifier [0x787188+2b5c8]\n\tchromedriver!GetHandleVerifier [0x78f23d+3367d]\n\tchromedriver!GetHandleVerifier [0x775138+19578]\n\tchromedriver!GetHandleVerifier [0x775302+19742]\n\tchromedriver!GetHandleVerifier [0x75e48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75b07ba9+19]\n\tntdll!RtlInitializeExceptionChain [0x76ecc3ab+6b]\n\tntdll!RtlClearBits [0x76ecc32f+bf]\n",
+      "screenshot": "C:\\Users\\Osstem\\Desktop\\cl\\clse\\e2e_automation\\reports\\screenshots\\TC_SUITE_009_fail.png",
+      "url": "https://hippo2qa.osstem.com/web/login",
+      "browser": "chrome",
+      "timestamp": "2026-04-20T10:54:25.842993"
+    }
+  ]
+}

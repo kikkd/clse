@@ -1,0 +1,36 @@
+{
+  "summary": {
+    "suite": "E2E Test Suite",
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "errors": 0,
+    "duration": 23.81,
+    "pass_rate": "50.0%"
+  },
+  "results": [
+    {
+      "test_id": "TC_SUITE_001",
+      "description": "More information 링크 클릭",
+      "status": "PASS",
+      "duration": 3.9,
+      "error_msg": null,
+      "screenshot": "C:\\Users\\whddl\\OneDrive\\바탕 화면\\cl\\e2e_automation\\reports\\screenshots\\TC_SUITE_001_click.png",
+      "url": "https://job.denall.com/hire-announce-main",
+      "browser": "chrome",
+      "timestamp": "2026-04-19T15:39:59.616933"
+    },
+    {
+      "test_id": "TC_SUITE_002",
+      "description": "h2 타이틀 텍스트 확인",
+      "status": "FAIL",
+      "duration": 12.79,
+      "error_msg": "Message: Element not found: ('tag name', 'h2')\nStacktrace:\n\tchromedriver!GetHandleVerifier [0x9fc733+10b73]\n\tchromedriver!GetHandleVerifier [0x9fc864+10ca4]\n\tchromedriver!(No symbol) [0x7d2100]\n\tchromedriver!(No symbol) [0x81acba]\n\tchromedriver!(No symbol) [0x81af5b]\n\tchromedriver!(No symbol) [0x85d9c2]\n\tchromedriver!(No symbol) [0x83dc64]\n\tchromedriver!(No symbol) [0x85b1f4]\n\tchromedriver!(No symbol) [0x83d9b6]\n\tchromedriver!(No symbol) [0x810339]\n\tchromedriver!(No symbol) [0x8110f4]\n\tchromedriver!GetHandleVerifier [0xc5fe04+274244]\n\tchromedriver!GetHandleVerifier [0xc5b459+26f899]\n\tchromedriver!GetHandleVerifier [0xc79bd5+28e015]\n\tchromedriver!GetHandleVerifier [0xa17188+2b5c8]\n\tchromedriver!GetHandleVerifier [0xa1f23d+3367d]\n\tchromedriver!GetHandleVerifier [0xa05138+19578]\n\tchromedriver!GetHandleVerifier [0xa05302+19742]\n\tchromedriver!GetHandleVerifier [0x9ee48f+28cf]\n\tKERNEL32!BaseThreadInitThunk [0x75a66839+19]\n\tntdll!RtlGetFullPathName_UEx [0x77ae906f+4bf]\n\tntdll!RtlGetFullPathName_UEx [0x77ae903d+48d]\n",
+      "screenshot": "C:\\Users\\whddl\\OneDrive\\바탕 화면\\cl\\e2e_automation\\reports\\screenshots\\TC_SUITE_002_fail.png",
+      "url": "https://job.denall.com/hire-announce-main",
+      "browser": "chrome",
+      "timestamp": "2026-04-19T15:40:12.413330"
+    }
+  ]
+}
