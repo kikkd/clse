@@ -8,10 +8,11 @@ from pages.base_page import BasePage
 class SearchPage(BasePage):
 
     # ── 엘리먼트 ─────────────────────────────────────────────────────────────
-    SEARCH_INPUT  = ("id", "search-box")
+    SEARCH_INPUT  = ("css", "input.patientName__input")
     SEARCH_BTN    = ("css", "button[type='submit']")
-    RESULT_ITEM   = ("class", "result-item")
+    RESULT_ITEM   = ("id", "pt-nm")
     NO_RESULT_MSG = ("class", "no-results")
+    PATIENT_INFO  = ("css", "div.patientInfo")
 
     # ── 동작 ─────────────────────────────────────────────────────────────────
     def search(self, keyword: str) -> None:
