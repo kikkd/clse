@@ -11,21 +11,23 @@ MAP_URL = "https://osstem.com/desktop/map"
 
 @pytest.fixture
 def map_page(logged_in_browser):
+    """세션 브라우저로 지도 페이지 이동 (재로그인 없이 URL만 이동)."""
     page = MapPage(logged_in_browser)
-    page.close_popup_if_present()  # 로그인 후 팝업 잔존 시 추가 닫기
-    page.sleep(2)  # 지도 API 로딩 대기
+    page.navigate(MAP_URL)
+    page.close_popup_if_present()
+    page.sleep(2)
     yield page
-    page.sleep(3)  # 테스트 종료 후 브라우저 유지
+    page.sleep(3)
 
 
 @pytest.fixture
 def map_page_no_login(browser):
-    """비로그인 상태의 지도 페이지"""
+    """비로그인 상태의 지도 페이지 (새 브라우저)."""
     page = MapPage(browser)
     page.navigate(MAP_URL)
     page.sleep(2)
     yield page
-    page.sleep(3)  # 테스트 종료 후 브라우저 유지
+    page.sleep(3)
 
 
 class TestMap:
@@ -112,7 +114,7 @@ class TestMap:
             pytest.skip("시/도 선택 동작 실패 — 선택자 또는 옵션값 확인 필요")
 
     def test_비로그인_접근(self, map_page_no_login):
-        """비로그인 상태에서 지도 페이지 접근 가능 여부 확인."""
+        """비로그인 상태에서 지도 페이지 접근 가능 여부 확인 (새 브라우저)."""
         url = map_page_no_login.get_current_url()
         title = map_page_no_login.get_title()
         # 접근 가능(map URL 유지) 또는 로그인 리다이렉트 둘 다 허용

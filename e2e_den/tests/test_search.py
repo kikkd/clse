@@ -6,14 +6,18 @@ test_search.py - 검색 시나리오 테스트
 import pytest
 from pages.map_page import MapPage
 
+MAP_URL = "https://osstem.com/desktop/map"
+
 
 @pytest.fixture
 def search_page(logged_in_browser):
+    """세션 브라우저로 지도(검색) 페이지 이동 (재로그인 없이 URL만 이동)."""
     page = MapPage(logged_in_browser)
+    page.navigate(MAP_URL)
     page.close_popup_if_present()
     page.sleep(2)
     yield page
-    page.sleep(3)  # 테스트 종료 후 브라우저 유지
+    page.sleep(3)
 
 
 class TestSearch:
