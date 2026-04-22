@@ -30,17 +30,17 @@ def base_url(request):
     return request.config.getoption("--url")
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def browser(browser_name):
-    """테스트 함수마다 브라우저 새로 생성 후 종료."""
+    """세션 전체에서 브라우저 하나만 생성 후 종료."""
     driver = create_driver(browser_name)
     yield driver
     driver.quit()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def logged_in_browser(browser):
-    """로그인된 상태의 브라우저 반환. 로그인이 필요한 모든 테스트에서 사용."""
+    """로그인된 상태의 브라우저 반환. 세션 내 한 번만 로그인."""
     page = LoginPage(browser)
     page.navigate(LOGIN_URL)
     page.login(LOGIN_ID, LOGIN_PW)
@@ -49,8 +49,9 @@ def logged_in_browser(browser):
 
 
 @pytest.fixture(autouse=True)
-def dismiss_leftover_alert(browser):
-    """테스트 종료 후 남아있는 alert 자동 닫기."""
+def refresh_before_each(browser):
+    """각 테스트 시작 전 페이지 새로고침."""
+    browser.refresh()
     yield
     try:
         browser.switch_to.alert.dismiss()

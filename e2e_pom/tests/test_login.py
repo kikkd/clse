@@ -8,11 +8,21 @@ from pages.login_page import LoginPage
 LOGIN_URL = "https://hippo2qa.osstem.com/web/login"
 
 
-@pytest.fixture
+@pytest.fixture(scope="class")
 def login_page(browser):
+    """클래스 시작 시 한 번만 LOGIN_URL로 이동. 각 테스트 전엔 conftest의 refresh_before_each가 새로고침."""
     page = LoginPage(browser)
     page.navigate(LOGIN_URL)
     return page
+
+
+@pytest.fixture(autouse=True)
+def ensure_on_login_url(browser, request):
+    """login_page를 사용하는 테스트는 매번 LOGIN_URL로 이동 보장 (로그인 후 URL 변경 대응)."""
+    if "login_page" in request.fixturenames:
+        if "login" not in browser.current_url:
+            browser.get(LOGIN_URL)
+    yield
 
 
 class TestLogin:
