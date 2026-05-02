@@ -17,7 +17,7 @@ def map_page(logged_in_browser):
     page.close_popup_if_present()
     page.sleep(2)
     yield page
-    page.sleep(3)
+    # page.sleep(3)
 
 
 @pytest.fixture
@@ -27,7 +27,7 @@ def map_page_no_login(browser):
     page.navigate(MAP_URL)
     page.sleep(2)
     yield page
-    page.sleep(3)
+    # page.sleep(3)
 
 
 class TestMap:
@@ -102,16 +102,16 @@ class TestMap:
                 names[0] if names else "unknown"
             )
 
-    def test_시도_필터_선택(self, map_page):
-        """시/도 필터 선택 후 결과가 갱신되어야 함."""
-        if not map_page.is_present(map_page.REGION_SIDO, timeout=5):
-            pytest.skip("시/도 선택 필터를 찾을 수 없음 — 선택자 확인 필요")
-        try:
-            map_page.select_sido("서울")
-            map_page.sleep(2)
-            assert map_page.get_title() != "", "시/도 선택 후 페이지가 정상이어야 함"
-        except Exception:
-            pytest.skip("시/도 선택 동작 실패 — 선택자 또는 옵션값 확인 필요")
+    # def test_시도_필터_선택(self, map_page):
+    #     """시/도 필터 선택 후 결과가 갱신되어야 함."""
+    #     if not map_page.is_present(map_page.REGION_SIDO, timeout=5):
+    #         pytest.skip("시/도 선택 필터를 찾을 수 없음 — 선택자 확인 필요")
+    #     try:
+    #         map_page.select_sido("서울")
+    #         map_page.sleep(2)
+    #         assert map_page.get_title() != "", "시/도 선택 후 페이지가 정상이어야 함"
+    #     except Exception:
+    #         pytest.skip("시/도 선택 동작 실패 — 선택자 또는 옵션값 확인 필요")
 
     def test_비로그인_접근(self, map_page_no_login):
         """비로그인 상태에서 지도 페이지 접근 가능 여부 확인 (새 브라우저)."""

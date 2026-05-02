@@ -62,6 +62,14 @@ def session_browser(browser_name):
     driver.quit()
 
 
+@pytest.fixture(scope="session")
+def session_no_login_browser(browser_name):
+    """세션 브라우저 — 비로그인 상태 전용 (로그인 불가 테스트 공유용)."""
+    driver = create_driver(browser_name)
+    yield driver
+    driver.quit()
+
+
 def _do_login(driver):
     """
     공통 로그인 절차:

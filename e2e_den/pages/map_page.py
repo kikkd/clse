@@ -13,7 +13,7 @@ from pages.base_page import BasePage
 class MapPage(BasePage):
 
     # ── 로그인 버튼 (비로그인 상태 GNB) ──────────────────────────────────────
-    LOGIN_BTN           = ("css selector", "a.gnb-account-link[href*='sso-login']")
+    LOGIN_BTN           = ("css", "a.gnb-account-link[href*='sso-login']")
 
     # ── 지도 컨테이너 ─────────────────────────────────────────────────────────
     MAP_CONTAINER       = ("css", "#map, .map-container, [class*='map'], [id*='map']")
@@ -46,8 +46,28 @@ class MapPage(BasePage):
     DETAIL_POPUP        = ("css", ".detail-popup, .info-window, [class*='popup']")
 
     # ── 동작 ─────────────────────────────────────────────────────────────────
+    _LOGIN_BTN_CSS = "a.gnb-account-link[href*='sso-login']"
+
+    def _get_login_btn(self):
+        try:
+            host = self.driver.find_element(By.TAG_NAME, "company-gnb")
+            return host.shadow_root.find_element(By.CSS_SELECTOR, self._LOGIN_BTN_CSS)
+        except Exception:
+            return None
+
+    def is_login_btn_present(self, timeout: int = 9) -> bool:
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                lambda d: self._get_login_btn() is not None
+            )
+            return True
+        except Exception:
+            return False
+
     def click_login_btn(self) -> None:
-        self.click(self.LOGIN_BTN)
+        if not self.is_login_btn_present(timeout=10):
+            raise RuntimeError("로그인 버튼을 찾을 수 없습니다 (Shadow DOM 또는 이미 로그인 상태)")
+        self.driver.execute_script("arguments[0].click();", self._get_login_btn())
 
     def type_search(self, keyword: str) -> None:
         """검색어 입력 → 자동완성 드롭다운 대기"""

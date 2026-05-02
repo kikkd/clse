@@ -19,13 +19,14 @@ VALID_PW   = "q2w3e4r5!d"
 
 
 @pytest.fixture
-def login_page(browser):
+def login_page(session_browser):
     """map 페이지에서 로그인 버튼 클릭 후 SSO 로그인 페이지 반환."""
-    map_page = MapPage(browser)
+    session_browser.delete_all_cookies()
+    map_page = MapPage(session_browser)
     map_page.navigate(MAP_URL)
     map_page.click_login_btn()
     map_page.wait_for_url_contains(SSO_DOMAIN, timeout=10)
-    return LoginPage(browser)
+    return LoginPage(session_browser)
 
 
 class TestLogin:
@@ -86,9 +87,9 @@ class TestLogin:
         assert SSO_DOMAIN in login_page.get_current_url(), \
             "로그인 버튼 클릭 후 member.denall.com으로 이동해야 함"
 
-    def test_map_로그인_버튼_존재(self, browser):
+    def test_map_로그인_버튼_존재(self, session_browser):
         """비로그인 상태에서 map 페이지에 로그인 버튼이 노출되어야 함."""
-        map_page = MapPage(browser)
+        map_page = MapPage(session_browser)
         map_page.navigate(MAP_URL)
-        assert map_page.is_present(MapPage.LOGIN_BTN, timeout=9), \
+        assert map_page.is_login_btn_present(timeout=9), \
             "비로그인 상태에서 map 페이지에 로그인 버튼이 있어야 함"

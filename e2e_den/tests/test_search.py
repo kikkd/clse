@@ -17,7 +17,7 @@ def search_page(logged_in_browser):
     page.close_popup_if_present()
     page.sleep(2)
     yield page
-    page.sleep(3)
+    # page.sleep(3)
 
 
 class TestSearch:

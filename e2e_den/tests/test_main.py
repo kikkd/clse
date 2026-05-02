@@ -20,9 +20,9 @@ def main_page(logged_in_browser):
 
 
 @pytest.fixture
-def main_page_no_login(browser):
-    """비로그인 상태의 메인 페이지."""
-    page = MainPage(browser)
+def main_page_no_login(session_no_login_browser):
+    """비로그인 상태의 메인 페이지 — 세션 브라우저 재사용 (로그인하지 않는 테스트 전용)."""
+    page = MainPage(session_no_login_browser)
     page.navigate(MAIN_URL)
     return page
 
@@ -52,11 +52,13 @@ class TestMain:
         assert main_page.is_logged_in(), \
             "로그인 후 .userInfo / #userName이 표시되어야 함"
         username = main_page.get_username()
+        # print(username)
         assert username != "", "사용자 이름이 비어있으면 안 됨"
 
     def test_GNB_메뉴_노출(self, main_page):
         """GNB 네비게이션 메뉴가 1개 이상 존재해야 함."""
-        items = main_page.find_all(main_page.GNB_MENU_ITEMS)
+        items = main_page.get_gnb_menu_items()
+        # print(items)
         assert len(items) > 0, "GNB 메뉴 항목이 1개 이상이어야 함"
 
     def test_푸터_노출(self, main_page):
@@ -81,7 +83,12 @@ class TestMain:
         """로그아웃 후 로그인 페이지로 이동 또는 로그인 버튼 노출 확인.
         세션 브라우저 상태를 망가뜨리므로 fresh_logged_in_browser(새 브라우저) 사용.
         """
-        if not main_page_fresh.is_present(main_page_fresh.GNB_LOGOUT_LINK, timeout=3):
+        from selenium.webdriver.support.ui import WebDriverWait
+        try:
+            WebDriverWait(main_page_fresh.driver, 7).until(
+                lambda d: len(main_page_fresh._gnb_query_all("a.gnb-name-item[href*='sso-logout']")) > 0
+            )
+        except Exception:
             pytest.skip("로그아웃 버튼을 찾을 수 없음 — 선택자 확인 필요")
         main_page_fresh.logout()
         main_page_fresh.sleep(1)
@@ -90,11 +97,9 @@ class TestMain:
         assert "login" in url or has_login, \
             "로그아웃 후 로그인 페이지 이동 또는 로그인 버튼이 노출되어야 함"
 
-    def test_보호페이지_직접_URL_접근(self, browser):
-        """비로그인 상태에서 보호 페이지 직접 접근 시 리다이렉트 확인.
-        새 브라우저(비로그인)로 직접 접근.
-        """
-        page = MainPage(browser)
+    def test_보호페이지_직접_URL_접근(self, session_no_login_browser):
+        """비로그인 상태에서 보호 페이지 직접 접근 시 리다이렉트 확인."""
+        page = MainPage(session_no_login_browser)
         page.navigate(MAIN_URL)
         page.sleep(2)
         url = page.get_current_url()
