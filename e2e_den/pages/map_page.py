@@ -13,7 +13,7 @@ from pages.base_page import BasePage
 class MapPage(BasePage):
 
     # ── 로그인 버튼 (비로그인 상태 GNB) ──────────────────────────────────────
-    LOGIN_BTN           = ("xpath", "//button[@type='button' and normalize-space(text())='로그인']")
+    LOGIN_BTN           = ("css selector", "a.gnb-account-link[href*='sso-login']")
 
     # ── 지도 컨테이너 ─────────────────────────────────────────────────────────
     MAP_CONTAINER       = ("css", "#map, .map-container, [class*='map'], [id*='map']")
