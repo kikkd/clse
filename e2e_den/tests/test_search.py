@@ -93,3 +93,46 @@ class TestSearch:
             "첫 번째 자동완성 항목({0}) 클릭 후 페이지가 정상이어야 함".format(
                 names[0] if names else "unknown"
             )
+
+
+class TestWorkingTimeFilter:
+    """진료시간 필터 — 시간/날짜 선택 후 버튼 표시 확인"""
+
+    SELECT_HOUR_1 = "17:00"
+    SELECT_DATE_2 = 8
+    SELECT_HOUR_3 = "16:00"
+    SELECT_DATE_3 = 9
+
+    def test_진료시간_선택_후_표시_확인(self, search_page):
+        """아래 화살표 클릭 → 시간 선택 → 닫기 → 선택 시간이 필터 버튼에 표시되어야 함."""
+        search_page.open_working_time_filter()
+        search_page.select_hour(self.SELECT_HOUR_1)
+        search_page.close_working_time_filter()
+        label = search_page.get_filter_btn_text()
+        assert self.SELECT_HOUR_1 in label, \
+            "선택한 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_HOUR_1, label)
+
+    def test_날짜_선택_후_표시_확인(self, search_page):
+        """아래 화살표 클릭 → 날짜 선택 → 닫기 → 선택 날짜가 필터 버튼에 표시되어야 함."""
+        search_page.open_working_time_filter()
+        search_page.select_date_by_day(self.SELECT_DATE_2)
+        search_page.close_working_time_filter()
+        label = search_page.get_filter_btn_text()
+        assert "{0}일".format(self.SELECT_DATE_2) in label, \
+            "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_DATE_2, label)
+
+    def test_진료시간_날짜_모두_선택_후_표시_확인(self, search_page):
+        """아래 화살표 클릭 → 시간+날짜 선택 → 닫기 → 시간과 날짜 모두 필터 버튼에 표시되어야 함."""
+        search_page.open_working_time_filter()
+        search_page.select_hour(self.SELECT_HOUR_3)
+        search_page.select_date_by_day(self.SELECT_DATE_3)
+        search_page.close_working_time_filter()
+        label = search_page.get_filter_btn_text()
+        assert self.SELECT_HOUR_3 in label, \
+            "선택한 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_HOUR_3, label)
+        assert "{0}일".format(self.SELECT_DATE_3) in label, \
+            "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_DATE_3, label)

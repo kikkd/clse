@@ -45,6 +45,11 @@ class MapPage(BasePage):
     # ── 상세 팝업 ─────────────────────────────────────────────────────────────
     DETAIL_POPUP        = ("css", ".detail-popup, .info-window, [class*='popup']")
 
+    # ── 진료시간/날짜 필터 ────────────────────────────────────────────────────
+    FILTER_TOGGLE_BTN   = ("css", "button.btn-filter-search")
+    FILTER_SHEET        = ("css", ".filter-sheet-working")
+    FILTER_HOUR_BTN     = ("css", ".hour-btn")
+
     # ── 동작 ─────────────────────────────────────────────────────────────────
     _LOGIN_BTN_CSS = "a.gnb-account-link[href*='sso-login']"
 
@@ -145,3 +150,118 @@ class MapPage(BasePage):
     def close_detail_popup(self) -> None:
         if self.is_present(self.POPUP_CLOSE_BTN, timeout=2):
             self.click(self.POPUP_CLOSE_BTN)
+
+    # ── 진료시간/날짜 필터 동작 ───────────────────────────────────────────────
+
+    def open_working_time_filter(self) -> None:
+        """아래 화살표 클릭으로 진료시간/날짜 필터 패널 열기"""
+        self.driver.execute_script(
+            "var btn = document.querySelector('i.icon-arrow-down.size-20');"
+            "if (btn) btn.closest('button').click();"
+        )
+        WebDriverWait(self.driver, 5).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".filter-sheet-working"))
+        )
+        self.sleep(1)  # 달력 내부 스팬 렌더링 대기
+
+    def close_working_time_filter(self) -> None:
+        """필터 토글 버튼 재클릭으로 진료시간/날짜 패널 닫기"""
+        self.driver.execute_script(
+            "var btn = document.querySelector('button.btn-filter-search');"
+            "if (btn) btn.click();"
+        )
+        WebDriverWait(self.driver, 5).until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, ".filter-sheet-working"))
+        )
+
+    def select_hour(self, hour_text: str) -> None:
+        """진료 시간 버튼 클릭 (예: '17:00') — JS로 직접 처리해 StaleElement 회피"""
+        clicked = self.driver.execute_script("""
+            var btns = document.querySelectorAll('.hour-btn');
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i].textContent.trim() === arguments[0]) {
+                    btns[i].click();
+                    return true;
+                }
+            }
+            return false;
+        """, hour_text)
+        if not clicked:
+            raise ValueError("시간 버튼 '{0}'를 찾을 수 없음".format(hour_text))
+        self.sleep(0.3)
+
+    def select_date_by_day(self, day: int) -> None:
+        """달력에서 활성화된 날짜 클릭 (disabled·other-month 제외)"""
+        clicked = self.driver.execute_script("""
+            var target = String(arguments[0]);
+            var spans = document.querySelectorAll('.schedule-wrap span');
+            for (var i = 0; i < spans.length; i++) {
+                var s = spans[i];
+                if (s.textContent.trim() === target
+                    && !s.classList.contains('disabled')
+                    && !s.classList.contains('other-month')) {
+                    var label = s.closest('label');
+                    if (label) { label.click(); return true; }
+                }
+            }
+            return false;
+        """, day)
+        if not clicked:
+            raise ValueError("날짜 '{0}'를 클릭할 수 없음 (비활성화 또는 없음)".format(day))
+        self.sleep(0.3)
+
+    def get_filter_btn_text(self) -> str:
+        """필터 버튼에 표시된 진료시간/날짜 텍스트 반환"""
+        return self.find(self.FILTER_TOGGLE_BTN, timeout=5).text.strip()
+
+    def select_hour_range(self, start_hour: str, end_hour: str) -> None:
+        """시작~종료 시간 범위의 모든 시간 버튼 클릭 (예: '00:00', '13:00')"""
+        start_h = int(start_hour.split(":")[0])
+        end_h = int(end_hour.split(":")[0])
+        for h in range(start_h, end_h + 1):
+            hour_str = "{0:02d}:00".format(h)
+            clicked = self.driver.execute_script("""
+                var btns = document.querySelectorAll('.hour-btn');
+                for (var i = 0; i < btns.length; i++) {
+                    if (btns[i].textContent.trim() === arguments[0]) {
+                        btns[i].click();
+                        return true;
+                    }
+                }
+                return false;
+            """, hour_str)
+            if not clicked:
+                raise ValueError("시간 버튼 '{0}'를 찾을 수 없음".format(hour_str))
+            self.sleep(0.1)
+
+    def get_filter_month(self):
+        """현재 달력 레이블(예: '2026.05')에서 (year, month) 반환"""
+        label = self.find(("css", ".month-nav-label"), timeout=5).text.strip()
+        parts = label.split(".")
+        return int(parts[0]), int(parts[1])
+
+    def navigate_filter_to_month(self, target_year: int, target_month: int) -> None:
+        """달력을 target_year/target_month까지 < > 버튼으로 이동 (최대 36개월)"""
+        for _ in range(36):
+            cur_year, cur_month = self.get_filter_month()
+            if cur_year == target_year and cur_month == target_month:
+                return
+            cur_total = cur_year * 12 + cur_month
+            tgt_total = target_year * 12 + target_month
+            if tgt_total < cur_total:
+                self.driver.execute_script(
+                    "var btn = document.querySelector('i.icon-arrow-left.size-12');"
+                    "if (btn) btn.closest('button').click();"
+                )
+            else:
+                self.driver.execute_script(
+                    "var btn = document.querySelector('i.icon-arrow-right.size-12');"
+                    "if (btn) btn.closest('button').click();"
+                )
+            self.sleep(0.5)
+        raise ValueError("달력을 {0}-{1:02d}으로 이동할 수 없음".format(target_year, target_month))
+
+    def select_date(self, year: int, month: int, day: int) -> None:
+        """달력을 해당 연/월로 이동한 뒤 날짜 클릭"""
+        self.navigate_filter_to_month(year, month)
+        self.select_date_by_day(day)

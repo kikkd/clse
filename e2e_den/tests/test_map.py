@@ -129,3 +129,108 @@ class TestMap:
         map_page.sleep(2)
         assert map_page.is_map_loaded(), \
             "뒤로가기 후 복귀 시 지도가 정상 로드되어야 함"
+
+
+class TestWorkingTimeFilter:
+    """진료시간 필터 — 시간/날짜 선택 후 버튼 표시 확인"""
+
+    SELECT_HOUR_1 = "17:00"
+    SELECT_DATE_2 = 8
+    SELECT_HOUR_3 = "16:00"
+    SELECT_DATE_3 = 9
+
+    def test_진료시간_선택_후_표시_확인(self, map_page):
+        """아래 화살표 클릭 → 시간 선택 → 닫기 → 선택 시간이 필터 버튼에 표시되어야 함."""
+        map_page.open_working_time_filter()
+        map_page.select_hour(self.SELECT_HOUR_1)
+        map_page.close_working_time_filter()
+        label = map_page.get_filter_btn_text()
+        assert self.SELECT_HOUR_1 in label, \
+            "선택한 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_HOUR_1, label)
+
+    def test_날짜_선택_후_표시_확인(self, map_page):
+        """아래 화살표 클릭 → 날짜 선택 → 닫기 → 선택 날짜가 필터 버튼에 표시되어야 함."""
+        map_page.open_working_time_filter()
+        map_page.select_date_by_day(self.SELECT_DATE_2)
+        map_page.close_working_time_filter()
+        label = map_page.get_filter_btn_text()
+        assert "{0}일".format(self.SELECT_DATE_2) in label, \
+            "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_DATE_2, label)
+
+    def test_진료시간_날짜_모두_선택_후_표시_확인(self, map_page):
+        """아래 화살표 클릭 → 시간+날짜 선택 → 닫기 → 시간과 날짜 모두 필터 버튼에 표시되어야 함."""
+        map_page.open_working_time_filter()
+        map_page.select_hour(self.SELECT_HOUR_3)
+        map_page.select_date_by_day(self.SELECT_DATE_3)
+        map_page.close_working_time_filter()
+        label = map_page.get_filter_btn_text()
+        assert self.SELECT_HOUR_3 in label, \
+            "선택한 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_HOUR_3, label)
+        assert "{0}일".format(self.SELECT_DATE_3) in label, \
+            "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
+                self.SELECT_DATE_3, label)
+
+
+class TestWorkingTimeFilterRange:
+    """진료시간 필터 — 시간/날짜 범위 선택 테스트 (파라미터화)
+
+    시간 버튼은 단일 선택(마지막 클릭이 선택됨)이며,
+    오늘 날짜 기준으로 과거 시간대는 UI에 렌더링되지 않음.
+    → 미래 날짜를 먼저 선택해 24시간 전체 활성화 후 시간 선택.
+    → 표시 검증은 마지막으로 클릭한 end_hour 기준.
+    """
+
+    @pytest.mark.parametrize("start_hour,end_hour,year,month,day", [
+        ("00:00", "05:00", 2026, 5, 20),
+        ("10:00", "13:00", 2026, 6, 15),
+        ("18:00", "22:00", 2026, 7,  1),
+    ])
+    def test_시간_범위_선택_후_표시_확인(self, map_page, start_hour, end_hour, year, month, day):
+        """미래 날짜 먼저 선택(24시간 활성화) → 시간 범위 클릭 → 마지막 시간이 표시되어야 함."""
+        map_page.open_working_time_filter()
+        map_page.select_date(year, month, day)  # 미래 날짜 → 모든 시간 버튼 활성화
+        map_page.sleep(0.7)                     # 시간 버튼 re-render 대기
+        map_page.select_hour_range(start_hour, end_hour)
+        map_page.close_working_time_filter()
+        label = map_page.get_filter_btn_text()
+        # UI는 leading zero 없이 표시 (예: "05:00" → "5:00")
+        end_display = "{0}:00".format(int(end_hour.split(":")[0]))
+        assert end_display in label, \
+            "마지막 선택 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(end_display, label)
+
+    @pytest.mark.parametrize("year,month,day", [
+        (2026, 5, 20),
+        (2026, 6, 15),
+        (2026, 7,  1),
+    ])
+    def test_달력_월_이동_날짜_선택_후_표시_확인(self, map_page, year, month, day):
+        """달력 월 이동 후 날짜 선택 시 해당 날짜가 필터 버튼에 표시되어야 함."""
+        map_page.open_working_time_filter()
+        map_page.select_date(year, month, day)
+        map_page.close_working_time_filter()
+        label = map_page.get_filter_btn_text()
+        assert "{0}일".format(day) in label, \
+            "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(day, label)
+
+    @pytest.mark.parametrize("start_hour,end_hour,year,month,day", [
+        ("00:00", "05:00", 2026, 5, 20),
+        ("10:00", "13:00", 2026, 6, 15),
+        ("18:00", "22:00", 2026, 7,  1),
+    ])
+    def test_시간_범위_날짜_복합_선택_후_표시_확인(self, map_page, start_hour, end_hour, year, month, day):
+        """미래 날짜 먼저 선택(24시간 활성화) → 시간 범위 클릭 → 마지막 시간+날짜가 표시되어야 함."""
+        map_page.open_working_time_filter()
+        map_page.select_date(year, month, day)  # 미래 날짜 → 모든 시간 버튼 활성화
+        map_page.sleep(0.7)                     # 시간 버튼 re-render 대기
+        map_page.select_hour_range(start_hour, end_hour)
+        map_page.close_working_time_filter()
+        label = map_page.get_filter_btn_text()
+        # UI는 leading zero 없이 표시 (예: "05:00" → "5:00")
+        end_display = "{0}:00".format(int(end_hour.split(":")[0]))
+        assert end_display in label, \
+            "마지막 선택 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(end_display, label)
+        assert "{0}일".format(day) in label, \
+            "날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(day, label)
