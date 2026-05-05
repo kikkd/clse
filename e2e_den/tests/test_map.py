@@ -132,16 +132,22 @@ class TestMap:
 
 
 class TestWorkingTimeFilter:
-    """진료시간 필터 — 시간/날짜 선택 후 버튼 표시 확인"""
+    """진료시간 필터 — 시간/날짜 선택 후 버튼 표시 확인
+
+    오늘 날짜 기준 과거 시간은 UI에 노출되지 않으므로
+    시간 선택 전 미래 날짜를 먼저 선택해 24시간 전체를 활성화한다.
+    """
 
     SELECT_HOUR_1 = "17:00"
-    SELECT_DATE_2 = 8
+    SELECT_DATE_2 = 15
     SELECT_HOUR_3 = "16:00"
-    SELECT_DATE_3 = 9
+    SELECT_DATE_3 = 20
 
     def test_진료시간_선택_후_표시_확인(self, map_page):
-        """아래 화살표 클릭 → 시간 선택 → 닫기 → 선택 시간이 필터 버튼에 표시되어야 함."""
+        """아래 화살표 클릭 → 미래 날짜로 시간 활성화 → 시간 선택 → 닫기 → 선택 시간이 표시되어야 함."""
         map_page.open_working_time_filter()
+        map_page.select_date_by_day(self.SELECT_DATE_2)  # 미래 날짜 → 24시간 활성화
+        map_page.sleep(0.7)
         map_page.select_hour(self.SELECT_HOUR_1)
         map_page.close_working_time_filter()
         label = map_page.get_filter_btn_text()
@@ -160,10 +166,11 @@ class TestWorkingTimeFilter:
                 self.SELECT_DATE_2, label)
 
     def test_진료시간_날짜_모두_선택_후_표시_확인(self, map_page):
-        """아래 화살표 클릭 → 시간+날짜 선택 → 닫기 → 시간과 날짜 모두 필터 버튼에 표시되어야 함."""
+        """아래 화살표 클릭 → 날짜 먼저 선택(24시간 활성화) → 시간 선택 → 닫기 → 모두 표시되어야 함."""
         map_page.open_working_time_filter()
+        map_page.select_date_by_day(self.SELECT_DATE_3)  # 날짜 먼저 → 24시간 활성화
+        map_page.sleep(0.7)
         map_page.select_hour(self.SELECT_HOUR_3)
-        map_page.select_date_by_day(self.SELECT_DATE_3)
         map_page.close_working_time_filter()
         label = map_page.get_filter_btn_text()
         assert self.SELECT_HOUR_3 in label, \

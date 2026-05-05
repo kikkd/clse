@@ -20,9 +20,9 @@ def main_page(logged_in_browser):
 
 
 @pytest.fixture
-def main_page_no_login(session_no_login_browser):
-    """비로그인 상태의 메인 페이지 — 세션 브라우저 재사용 (로그인하지 않는 테스트 전용)."""
-    page = MainPage(session_no_login_browser)
+def main_page_no_login(browser):
+    """비로그인 상태의 메인 페이지 — 테스트마다 새 브라우저 사용."""
+    page = MainPage(browser)
     page.navigate(MAIN_URL)
     return page
 
@@ -97,9 +97,9 @@ class TestMain:
         assert "login" in url or has_login, \
             "로그아웃 후 로그인 페이지 이동 또는 로그인 버튼이 노출되어야 함"
 
-    def test_보호페이지_직접_URL_접근(self, session_no_login_browser):
+    def test_보호페이지_직접_URL_접근(self, browser):
         """비로그인 상태에서 보호 페이지 직접 접근 시 리다이렉트 확인."""
-        page = MainPage(session_no_login_browser)
+        page = MainPage(browser)
         page.navigate(MAIN_URL)
         page.sleep(2)
         url = page.get_current_url()
