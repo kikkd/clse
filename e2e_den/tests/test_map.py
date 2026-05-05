@@ -3,10 +3,21 @@ test_map.py - 지도 페이지 시나리오 테스트
 대상: https://osstem.com/desktop/map
 """
 
+import calendar
 import pytest
+from datetime import date, timedelta
 from pages.map_page import MapPage
 
 MAP_URL = "https://osstem.com/desktop/map"
+
+
+def _future_day(days_ahead: int) -> int:
+    """오늘로부터 days_ahead일 후 날짜(일). 다음 달로 넘어가면 이번 달 말일 반환."""
+    today = date.today()
+    target = today + timedelta(days=days_ahead)
+    if target.month == today.month:
+        return target.day
+    return calendar.monthrange(today.year, today.month)[1]
 
 
 @pytest.fixture
@@ -139,14 +150,19 @@ class TestWorkingTimeFilter:
     """
 
     SELECT_HOUR_1 = "17:00"
-    SELECT_DATE_2 = 15
+    SELECT_DATE_2 = _future_day(10)
     SELECT_HOUR_3 = "16:00"
-    SELECT_DATE_3 = 20
+    SELECT_DATE_3 = _future_day(15)
+    # 다음 달로 넘어간 날짜 그대로 사용 시 아래 변수로 교체 후 select_date(d.year, d.month, d.day) 방식으로 변경
+    _FULL_DATE_2 = date.today() + timedelta(days=10)
+    _FULL_DATE_3 = date.today() + timedelta(days=15)
 
     def test_진료시간_선택_후_표시_확인(self, map_page):
         """아래 화살표 클릭 → 미래 날짜로 시간 활성화 → 시간 선택 → 닫기 → 선택 시간이 표시되어야 함."""
         map_page.open_working_time_filter()
-        map_page.select_date_by_day(self.SELECT_DATE_2)  # 미래 날짜 → 24시간 활성화
+        # [날짜 선택 방식 전환] 아래 두 줄 중 하나만 활성화. 전환 시: 현재 활성 줄 주석 처리 + 주석된 줄 주석 해제
+        map_page.select_date_by_day(self.SELECT_DATE_2)           # 이번 달 말일 대체 방식
+        # d = self._FULL_DATE_2; map_page.select_date(d.year, d.month, d.day)  # 다음 달 넘어간 날짜 그대로 사용 시
         map_page.sleep(0.7)
         map_page.select_hour(self.SELECT_HOUR_1)
         map_page.close_working_time_filter()
@@ -158,7 +174,9 @@ class TestWorkingTimeFilter:
     def test_날짜_선택_후_표시_확인(self, map_page):
         """아래 화살표 클릭 → 날짜 선택 → 닫기 → 선택 날짜가 필터 버튼에 표시되어야 함."""
         map_page.open_working_time_filter()
-        map_page.select_date_by_day(self.SELECT_DATE_2)
+        # [날짜 선택 방식 전환] 아래 두 줄 중 하나만 활성화. 전환 시: 현재 활성 줄 주석 처리 + 주석된 줄 주석 해제
+        map_page.select_date_by_day(self.SELECT_DATE_2)           # 이번 달 말일 대체 방식
+        # d = self._FULL_DATE_2; map_page.select_date(d.year, d.month, d.day)  # 다음 달 넘어간 날짜 그대로 사용 시
         map_page.close_working_time_filter()
         label = map_page.get_filter_btn_text()
         assert "{0}일".format(self.SELECT_DATE_2) in label, \
@@ -168,7 +186,9 @@ class TestWorkingTimeFilter:
     def test_진료시간_날짜_모두_선택_후_표시_확인(self, map_page):
         """아래 화살표 클릭 → 날짜 먼저 선택(24시간 활성화) → 시간 선택 → 닫기 → 모두 표시되어야 함."""
         map_page.open_working_time_filter()
-        map_page.select_date_by_day(self.SELECT_DATE_3)  # 날짜 먼저 → 24시간 활성화
+        # [날짜 선택 방식 전환] 아래 두 줄 중 하나만 활성화. 전환 시: 현재 활성 줄 주석 처리 + 주석된 줄 주석 해제
+        map_page.select_date_by_day(self.SELECT_DATE_3)           # 이번 달 말일 대체 방식
+        # d = self._FULL_DATE_3; map_page.select_date(d.year, d.month, d.day)  # 다음 달 넘어간 날짜 그대로 사용 시
         map_page.sleep(0.7)
         map_page.select_hour(self.SELECT_HOUR_3)
         map_page.close_working_time_filter()
