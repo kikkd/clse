@@ -74,6 +74,18 @@ class MapPage(BasePage):
 
     def click_login_btn(self) -> None:
         if not self.is_login_btn_present(timeout=10):
+            import logging
+            _log = logging.getLogger(__name__)
+            diag = self.driver.execute_script("""
+                var host = document.querySelector('company-gnb');
+                return {
+                    url:       location.href,
+                    hasHost:   !!host,
+                    hasShadow: !!(host && host.shadowRoot),
+                    bodySnip:  document.body ? document.body.innerHTML.slice(0, 300) : 'no body'
+                };
+            """)
+            _log.warning("login-btn diag: %s", diag)
             raise RuntimeError("로그인 버튼을 찾을 수 없습니다 (Shadow DOM 또는 이미 로그인 상태)")
         self.driver.execute_script("arguments[0].click();", self._get_login_btn())
 
