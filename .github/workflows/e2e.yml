@@ -1,0 +1,42 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [test_ci]
+  pull_request:
+    branches: [test_ci]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    env:
+      HEADLESS: "true"
+      LOGIN_ID: ${{ secrets.LOGIN_ID }}
+      LOGIN_PW: ${{ secrets.LOGIN_PW }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: e2e_den
+        run: pip install -r requirements.txt
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run E2E tests
+        working-directory: e2e_den
+        run: pytest --browser=chrome
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-reports
+          path: e2e_den/reports/

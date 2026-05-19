@@ -4,23 +4,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 BASE_URL = "https://osstem.com/desktop"  # 테스트 대상 기본 URL
 
+_headless = os.environ.get("HEADLESS", "false").lower() == "true"
+
 BROWSER_OPTIONS = {
     "chrome": {
-        "headless": False,
+        "headless": _headless,
         "window_size": (1920, 1080),
         "disable_gpu": True,
         "no_sandbox": True,
     },
     "firefox": {
-        "headless": False,
+        "headless": _headless,
         "window_size": (1920, 1080),
     },
     "edge": {
-        "headless": False,
+        "headless": _headless,
         "window_size": (1920, 1080),
     },
     "safari": {
-        "headless": False,
+        "headless": _headless,
         "window_size": (1920, 1080),
     },
 }

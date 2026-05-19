@@ -16,6 +16,7 @@ conftest.py - pytest 전역 fixture 및 공통 설정
   - fresh_logged_in_browser : 새 브라우저에서 로그인 (로그아웃 등 세션 변경 테스트 전용)
 """
 
+import os
 import pytest
 from drivers.browser_factory import create_driver
 from config.settings import BASE_URL
@@ -24,8 +25,8 @@ from pages.login_page import LoginPage
 
 MAP_URL   = "https://osstem.com/desktop/map"
 MAIN_URL  = "https://osstem.com/desktop"
-LOGIN_ID  = "whddls66"
-LOGIN_PW  = "q2w3e4r5!d"
+LOGIN_ID  = os.environ.get("LOGIN_ID", "")
+LOGIN_PW  = os.environ.get("LOGIN_PW", "")
 SSO_DOMAIN = "member.denall.com"
 
 
