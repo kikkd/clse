@@ -91,7 +91,7 @@ class MainPage(BasePage):
         if logout_links:
             self.driver.execute_script("arguments[0].click();", logout_links[0])
 
-    def is_logged_in(self, timeout: int = 7) -> bool:
+    def is_logged_in(self, timeout: int = 15) -> bool:
         """Shadow DOM GNB에서 .gnb-name-text 존재 여부로 로그인 상태 판단.
         company-gnb가 인증 상태를 비동기로 렌더링하므로 대기 필요.
         """
