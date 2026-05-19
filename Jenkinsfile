@@ -21,6 +21,7 @@ pipeline {
         stage('Run E2E tests') {
             steps {
                 dir('e2e_den') {
+                    bat 'if not exist reports mkdir reports'
                     bat 'C:\\Python38\\python.exe -m pytest --browser=chrome'
                 }
             }
