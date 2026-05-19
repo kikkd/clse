@@ -33,6 +33,17 @@ LOGIN_PW  = os.environ.get("LOGIN_PW", "")
 SSO_DOMAIN = "member.denall.com"
 
 
+def pytest_configure(config):
+    if not hasattr(config, "_metadata"):
+        config._metadata = {}
+    config._metadata["Target URL"] = BASE_URL
+
+
+def pytest_sessionstart(session):
+    browser = session.config.getoption("--browser", default="chrome")
+    session.config._metadata["Browser"] = browser
+
+
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome",
                      help="실행 브라우저: chrome | firefox | edge")
