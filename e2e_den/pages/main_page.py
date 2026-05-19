@@ -102,6 +102,7 @@ class MainPage(BasePage):
             )
             return True
         except Exception:
+            logger.warning("is_logged_in FAILED — gnb_debug: %s", self._gnb_debug_info())
             return False
 
     def is_logged_out(self) -> bool:

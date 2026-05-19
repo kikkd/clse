@@ -18,6 +18,9 @@ conftest.py - pytest 전역 fixture 및 공통 설정
 
 import os
 import pytest
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 from drivers.browser_factory import create_driver
 from config.settings import BASE_URL
 from pages.map_page import MapPage
