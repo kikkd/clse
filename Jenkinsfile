@@ -11,7 +11,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 dir('e2e_den') {
-                    bat 'py -m pip install -r requirements.txt'
+                    bat 'C:\\Python39\\python.exe -m pip install -r requirements.txt'
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
         stage('Run E2E tests') {
             steps {
                 dir('e2e_den') {
-                    bat 'py -m pytest --browser=chrome'
+                    bat 'C:\\Python39\\python.exe -m pytest --browser=chrome'
                 }
             }
         }
