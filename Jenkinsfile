@@ -31,7 +31,15 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'e2e_den/reports/**/*', allowEmptyArchive: true
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'e2e_den/reports',
+                reportFiles: 'report.html',
+                reportName: 'E2E Test Report'
+            ])
+            archiveArtifacts artifacts: 'e2e_den/reports/**', allowEmptyArchive: true
         }
     }
 }
