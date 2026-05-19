@@ -9,7 +9,7 @@ on:
 
 jobs:
   e2e:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     env:
       HEADLESS: "true"
@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies
         working-directory: e2e_den
         run: pip install -r requirements.txt
-
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
 
       - name: Run E2E tests
         working-directory: e2e_den
