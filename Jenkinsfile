@@ -31,9 +31,6 @@ pipeline {
 
     post {
         always {
-            script {
-                System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "")
-            }
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
