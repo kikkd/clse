@@ -55,8 +55,11 @@ class MapPage(BasePage):
 
     def _get_login_btn(self):
         try:
-            host = self.driver.find_element(By.TAG_NAME, "company-gnb")
-            return host.shadow_root.find_element(By.CSS_SELECTOR, self._LOGIN_BTN_CSS)
+            return self.driver.execute_script("""
+                var host = document.querySelector('company-gnb');
+                if (!host || !host.shadowRoot) return null;
+                return host.shadowRoot.querySelector(arguments[0]);
+            """, self._LOGIN_BTN_CSS)
         except Exception:
             return None
 
