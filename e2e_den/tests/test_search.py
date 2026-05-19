@@ -149,10 +149,9 @@ class TestWorkingTimeFilter:
 
     def test_진료시간_날짜_모두_선택_후_표시_확인(self, search_page):
         """아래 화살표 클릭 → 날짜 먼저 선택(24시간 활성화) → 시간 선택 → 닫기 → 모두 표시되어야 함."""
+        d = self._FULL_DATE_3
         search_page.open_working_time_filter()
-        # [날짜 선택 방식 전환] 아래 두 줄 중 하나만 활성화. 전환 시: 현재 활성 줄 주석 처리 + 주석된 줄 주석 해제
-        search_page.select_date_by_day(self.SELECT_DATE_3)           # 이번 달 말일 대체 방식
-        # d = self._FULL_DATE_3; search_page.select_date(d.year, d.month, d.day)  # 다음 달 넘어간 날짜 그대로 사용 시
+        search_page.select_date(d.year, d.month, d.day)
         search_page.sleep(0.7)
         search_page.select_hour(self.SELECT_HOUR_3)
         search_page.close_working_time_filter()
@@ -160,6 +159,6 @@ class TestWorkingTimeFilter:
         assert self.SELECT_HOUR_3 in label, \
             "선택한 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
                 self.SELECT_HOUR_3, label)
-        assert "{0}일".format(self.SELECT_DATE_3) in label, \
+        assert "{0}일".format(d.day) in label, \
             "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(
-                self.SELECT_DATE_3, label)
+                d.day, label)
