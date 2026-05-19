@@ -8,14 +8,15 @@ test_login.py - 로그인 시나리오 테스트
   4. 성공 시 osstem.com으로 리다이렉트
 """
 
+import os
 import pytest
 from pages.map_page import MapPage
 from pages.login_page import LoginPage
 
 MAP_URL    = "https://osstem.com/desktop/map"
 SSO_DOMAIN = "member.denall.com"
-VALID_ID   = "whddls66"
-VALID_PW   = "q2w3e4r5!d"
+VALID_ID   = os.environ.get("LOGIN_ID", "")
+VALID_PW   = os.environ.get("LOGIN_PW", "")
 
 
 @pytest.fixture
