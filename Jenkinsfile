@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     environment {
-        HEADLESS  = 'true'
-        LOGIN_ID  = credentials('E2E_LOGIN_ID')
-        LOGIN_PW  = credentials('E2E_LOGIN_PW')
+        HEADLESS       = 'true'
+        LOGIN_ID       = credentials('E2E_LOGIN_ID')
+        LOGIN_PW       = credentials('E2E_LOGIN_PW')
+        PYTHONIOENCODING = 'utf-8'
+        PYTHONUTF8     = '1'
     }
 
     stages {
