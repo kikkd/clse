@@ -200,6 +200,11 @@ class TestWorkingTimeFilter:
                 d.day, label)
 
 
+_D1 = date.today() + timedelta(days=1)
+_D2 = date.today() + timedelta(days=30)
+_D3 = date.today() + timedelta(days=60)
+
+
 class TestWorkingTimeFilterRange:
     """진료시간 필터 — 시간/날짜 범위 선택 테스트 (파라미터화)
 
@@ -210,9 +215,9 @@ class TestWorkingTimeFilterRange:
     """
 
     @pytest.mark.parametrize("start_hour,end_hour,year,month,day", [
-        ("00:00", "05:00", 2026, 5, 20),
-        ("10:00", "13:00", 2026, 6, 15),
-        ("18:00", "22:00", 2026, 7,  1),
+        ("00:00", "05:00", _D1.year, _D1.month, _D1.day),
+        ("10:00", "13:00", _D2.year, _D2.month, _D2.day),
+        ("18:00", "22:00", _D3.year, _D3.month, _D3.day),
     ])
     def test_시간_범위_선택_후_표시_확인(self, map_page, start_hour, end_hour, year, month, day):
         """미래 날짜 먼저 선택(24시간 활성화) → 시간 범위 클릭 → 마지막 시간이 표시되어야 함."""
@@ -228,9 +233,9 @@ class TestWorkingTimeFilterRange:
             "마지막 선택 시간 '{0}'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(end_display, label)
 
     @pytest.mark.parametrize("year,month,day", [
-        (2026, 5, 20),
-        (2026, 6, 15),
-        (2026, 7,  1),
+        (_D1.year, _D1.month, _D1.day),
+        (_D2.year, _D2.month, _D2.day),
+        (_D3.year, _D3.month, _D3.day),
     ])
     def test_달력_월_이동_날짜_선택_후_표시_확인(self, map_page, year, month, day):
         """달력 월 이동 후 날짜 선택 시 해당 날짜가 필터 버튼에 표시되어야 함."""
@@ -242,9 +247,9 @@ class TestWorkingTimeFilterRange:
             "선택한 날짜 '{0}일'이 필터 버튼에 표시되어야 함. 실제: '{1}'".format(day, label)
 
     @pytest.mark.parametrize("start_hour,end_hour,year,month,day", [
-        ("00:00", "05:00", 2026, 5, 20),
-        ("10:00", "13:00", 2026, 6, 15),
-        ("18:00", "22:00", 2026, 7,  1),
+        ("00:00", "05:00", _D1.year, _D1.month, _D1.day),
+        ("10:00", "13:00", _D2.year, _D2.month, _D2.day),
+        ("18:00", "22:00", _D3.year, _D3.month, _D3.day),
     ])
     def test_시간_범위_날짜_복합_선택_후_표시_확인(self, map_page, start_hour, end_hour, year, month, day):
         """미래 날짜 먼저 선택(24시간 활성화) → 시간 범위 클릭 → 마지막 시간+날짜가 표시되어야 함."""
