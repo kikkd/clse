@@ -10,9 +10,8 @@ pipeline {
         stage('SBT - Lint') {
             steps {
                 dir('e2e_den') {
-                    bat 'C:\\Python38\\python.exe -m pip install flake8 flake8-html --quiet'
-                    bat 'if not exist reports\\lint mkdir reports\\lint'
-                    bat 'C:\\Python38\\python.exe -m flake8 --format=html --htmldir=reports/lint . || exit 0'
+                    bat 'C:\\Python38\\python.exe -m pip install flake8 --quiet'
+                    bat 'C:\\Python38\\python.exe lint_report.py'
                 }
             }
         }
