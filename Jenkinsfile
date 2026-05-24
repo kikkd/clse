@@ -58,7 +58,7 @@ pipeline {
             mail to: 'ch01@osstem.com',
                  subject: "[Jenkins] 빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: "E2E 테스트가 실패했습니다. 결과 report 참조 후 재 빌드 부탁드립니다.\n\n빌드 URL: ${env.BUILD_URL}"
-            slackSend channel: '#general',
+            slackSend channel: '#automation-test',
                       color: 'danger',
                       message: "❌ 빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n결과 report 참조 후 재 빌드 부탁드립니다.\n빌드 URL: ${env.BUILD_URL}"
         }
@@ -66,7 +66,7 @@ pipeline {
             mail to: 'ch01@osstem.com',
                  subject: "[Jenkins] 빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: "E2E 테스트가 성공했습니다. 결과 report 참조 및 main 브랜치 머지 부탁드립니다. \n\n빌드 URL: ${env.BUILD_URL}"
-            slackSend channel: '#general',
+            slackSend channel: '#automation-test',
                       color: 'good',
                       message: "✅ 빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n결과 report 참조 및 main 브랜치 머지 부탁드립니다.\n빌드 URL: ${env.BUILD_URL}"
         }
