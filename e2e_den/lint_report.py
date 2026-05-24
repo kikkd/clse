@@ -64,6 +64,16 @@ CODE_MAP = {
     "W504": ("줄 바꿈이 이진 연산자 뒤에 위치", "line break after binary operator"),
     # W6xx
     "W605": ("잘못된 이스케이프 시퀀스", "invalid escape sequence"),
+    # F4xx - pyflakes import
+    "F401": ("import 되었지만 사용되지 않음", "imported but unused"),
+    "F402": ("loop 변수에 의해 가려진 import", "import from line N shadowed by loop variable"),
+    "F403": ("star import 사용으로 미정의 이름 감지 불가", "'from module import *' used"),
+    "F404": ("다른 구문 이후 future import 사용", "future import after other statements"),
+    "F405": ("star import로 인해 미정의 이름일 수 있음", "may be undefined or from star imports"),
+    # F8xx - pyflakes 이름
+    "F811": ("미사용 이름 재정의", "redefinition of unused name from import"),
+    "F821": ("미정의 이름 사용", "undefined name"),
+    "F841": ("할당되었지만 사용되지 않는 지역 변수", "local variable is assigned to but never used"),
 }
 
 
@@ -83,14 +93,14 @@ CATEGORY_MAP = {
 }
 
 
-def get_description(code):
+def get_description(code, original_text=""):
     if code[:4] in CODE_MAP:
         ko, en = CODE_MAP[code[:4]]
         return ko, en
     if code[:2] in CATEGORY_MAP:
         ko, en = CATEGORY_MAP[code[:2]]
         return ko, en
-    return "기타 오류", "other error"
+    return "기타 오류", original_text or "other error"
 
 
 def run_flake8():
@@ -107,7 +117,7 @@ def parse_results(output):
         parts = line.split("::")
         if len(parts) == 5:
             path, row, col, code, text = parts
-            ko, en = get_description(code)
+            ko, en = get_description(code, text.strip())
             issues.append({
                 "path": path,
                 "row": int(row),
