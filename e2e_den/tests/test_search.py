@@ -12,12 +12,16 @@ MAP_URL = "https://osstem.com/desktop/map"
 
 
 def _future_day(days_ahead: int) -> int:
-    """오늘로부터 days_ahead일 후 날짜(일). 다음 달로 넘어가면 이번 달 말일 반환."""
+    """오늘로부터 days_ahead일 후 날짜(일). 다음 달로 넘어가면 이번 달 마지막 평일 반환."""
     today = date.today()
     target = today + timedelta(days=days_ahead)
     if target.month == today.month:
         return target.day
-    return calendar.monthrange(today.year, today.month)[1]
+    last_day = calendar.monthrange(today.year, today.month)[1]
+    last = date(today.year, today.month, last_day)
+    while last.weekday() >= 5:  # 5=토, 6=일
+        last -= timedelta(days=1)
+    return last.day
 
 
 @pytest.fixture

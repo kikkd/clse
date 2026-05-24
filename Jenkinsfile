@@ -54,5 +54,15 @@ pipeline {
             ])
             archiveArtifacts artifacts: 'e2e_den/reports/**', allowEmptyArchive: true
         }
+        failure {
+            mail to: 'ch01@osstem.com',
+                 subject: "[Jenkins] 빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "E2E 테스트가 실패했습니다.\n\n빌드 URL: ${env.BUILD_URL}"
+        }
+        success {
+            mail to: 'ch01@osstem.com',
+                 subject: "[Jenkins] 빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "E2E 테스트가 성공했습니다.\n\n빌드 URL: ${env.BUILD_URL}"
+        }
     }
 }
