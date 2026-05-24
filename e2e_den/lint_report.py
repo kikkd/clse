@@ -67,12 +67,30 @@ CODE_MAP = {
 }
 
 
+CATEGORY_MAP = {
+    "E1": ("들여쓰기 오류", "indentation error"),
+    "E2": ("공백 오류", "whitespace error"),
+    "E3": ("빈 줄 오류", "blank line error"),
+    "E4": ("import 오류", "import error"),
+    "E5": ("줄 길이 오류", "line length error"),
+    "E7": ("구문 오류", "statement error"),
+    "E9": ("런타임 오류", "runtime error"),
+    "W1": ("들여쓰기 경고", "indentation warning"),
+    "W2": ("공백 경고", "whitespace warning"),
+    "W3": ("빈 줄 경고", "blank line warning"),
+    "W5": ("줄 바꿈 경고", "line break warning"),
+    "W6": ("사용 중단 경고", "deprecation warning"),
+}
+
+
 def get_description(code):
-    prefix = code[:4]
-    if prefix in CODE_MAP:
-        ko, en = CODE_MAP[prefix]
+    if code[:4] in CODE_MAP:
+        ko, en = CODE_MAP[code[:4]]
         return ko, en
-    return "알 수 없는 오류", "unknown error"
+    if code[:2] in CATEGORY_MAP:
+        ko, en = CATEGORY_MAP[code[:2]]
+        return ko, en
+    return "기타 오류", "other error"
 
 
 def run_flake8():
