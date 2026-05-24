@@ -35,7 +35,7 @@ TIMEOUTS = {
 }
 
 PATHS = {
-    "reports":     os.path.join(BASE_DIR, "reports"),
+    "reports": os.path.join(BASE_DIR, "reports"),
     "screenshots": os.path.join(BASE_DIR, "reports", "screenshots"),
 }
 

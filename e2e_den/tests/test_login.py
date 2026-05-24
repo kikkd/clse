@@ -13,10 +13,10 @@ import pytest
 from pages.map_page import MapPage
 from pages.login_page import LoginPage
 
-MAP_URL    = "https://osstem.com/desktop/map"
+MAP_URL = "https://osstem.com/desktop/map"
 SSO_DOMAIN = "member.denall.com"
-VALID_ID   = os.environ.get("LOGIN_ID", "")
-VALID_PW   = os.environ.get("LOGIN_PW", "")
+VALID_ID = os.environ.get("LOGIN_ID", "")
+VALID_PW = os.environ.get("LOGIN_PW", "")
 
 
 @pytest.fixture

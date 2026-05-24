@@ -12,13 +12,13 @@ logger = logging.getLogger(__name__)
 class MainPage(BasePage):
 
     # ── GNB / LNB ─────────────────────────────────────────────────────────────
-    GNB_NAV         = ("css", "nav.map-lnb")
-    GNB_MENU_ITEMS  = ("css", "nav.map-lnb button")
-    GNB_LOGIN_LINK  = ("css", "a[href*='login'], .btn-login, .login-link")
+    GNB_NAV = ("css", "nav.map-lnb")
+    GNB_MENU_ITEMS = ("css", "nav.map-lnb button")
+    GNB_LOGIN_LINK = ("css", "a[href*='login'], .btn-login, .login-link")
     GNB_MYPAGE_LINK = ("css", "a[href='/desktop/history']")
 
-    USER_INFO       = ("css", ".userInfo")
-    USER_PROFILE    = ("id",  "userName")
+    USER_INFO = ("css", ".userInfo")
+    USER_PROFILE = ("id", "userName")
 
     def _gnb_query_all(self, css: str, timeout: int = 5) -> list:
         """company-gnb Shadow DOM 안에서 CSS 셀렉터로 요소 목록 반환.
@@ -59,20 +59,20 @@ class MainPage(BasePage):
             return {"error": str(e)}
 
     # ── 메인 배너 ─────────────────────────────────────────────────────────────
-    BANNER          = ("css", ".banner, .slider, .swiper, [class*='banner'], [class*='slider']")
-    BANNER_NEXT     = ("css", ".swiper-button-next, .banner-next, .slider-next, [class*='next']")
-    BANNER_PREV     = ("css", ".swiper-button-prev, .banner-prev, .slider-prev, [class*='prev']")
+    BANNER = ("css", ".banner, .slider, .swiper, [class*='banner'], [class*='slider']")
+    BANNER_NEXT = ("css", ".swiper-button-next, .banner-next, .slider-next, [class*='next']")
+    BANNER_PREV = ("css", ".swiper-button-prev, .banner-prev, .slider-prev, [class*='prev']")
 
     # ── 공통 팝업 ─────────────────────────────────────────────────────────────
-    POPUP           = ("css", ".popup, .modal, [role='dialog']")
+    POPUP = ("css", ".popup, .modal, [role='dialog']")
     POPUP_CLOSE_BTN = ("css", ".popup .close, .modal .close, button[aria-label*='close'], button[aria-label*='닫기']")
 
     # ── 푸터 ─────────────────────────────────────────────────────────────────
-    FOOTER          = ("css", "footer")
-    FOOTER_LINKS    = ("css", "footer a")
+    FOOTER = ("css", "footer")
+    FOOTER_LINKS = ("css", "footer a")
 
     # ── 공지/이벤트 ───────────────────────────────────────────────────────────
-    NOTICE_SECTION  = ("css", "[class*='notice'], [class*='board'], [class*='news']")
+    NOTICE_SECTION = ("css", "[class*='notice'], [class*='board'], [class*='news']")
 
     # ── 동작 ─────────────────────────────────────────────────────────────────
     def close_popup_if_present(self) -> None:

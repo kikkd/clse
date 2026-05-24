@@ -115,7 +115,7 @@ class TestMap:
         assert map_page.get_title() != "", \
             "첫 번째 자동완성 항목({0}) 클릭 후 페이지가 정상이어야 함".format(
                 names[0] if names else "unknown"
-            )
+        )
 
     # def test_시도_필터_선택(self, map_page):
     #     """시/도 필터 선택 후 결과가 갱신되어야 함."""

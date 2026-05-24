@@ -76,10 +76,10 @@ def _build_safari(_opts: dict) -> webdriver.Safari:
 
 
 _BUILDERS = {
-    "chrome":  _build_chrome,
+    "chrome": _build_chrome,
     "firefox": _build_firefox,
-    "edge":    _build_edge,
-    "safari":  _build_safari,
+    "edge": _build_edge,
+    "safari": _build_safari,
 }
 
 

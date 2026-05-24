@@ -13,42 +13,42 @@ from pages.base_page import BasePage
 class MapPage(BasePage):
 
     # ── 로그인 버튼 (비로그인 상태 GNB) ──────────────────────────────────────
-    LOGIN_BTN           = ("css", "a.gnb-account-link[href*='sso-login']")
+    LOGIN_BTN = ("css", "a.gnb-account-link[href*='sso-login']")
 
     # ── 지도 컨테이너 ─────────────────────────────────────────────────────────
-    MAP_CONTAINER       = ("css", "#map, .map-container, [class*='map'], [id*='map']")
+    MAP_CONTAINER = ("css", "#map, .map-container, [class*='map'], [id*='map']")
 
     # ── 검색 입력 ─────────────────────────────────────────────────────────────
-    SEARCH_INPUT        = ("css", "input[placeholder*='검색'], input[placeholder*='병원'], "
-                                  "input[placeholder*='치과'], input[type='text']")
+    SEARCH_INPUT = ("css", "input[placeholder*='검색'], input[placeholder*='병원'], "
+                    "input[placeholder*='치과'], input[type='text']")
 
     # ── 자동완성 드롭다운 (타이핑 후 JS 렌더링) ───────────────────────────────
     # <ul id="ac-listbox" role="listbox">
-    AUTOCOMPLETE_BOX    = ("id",  "ac-listbox")
+    AUTOCOMPLETE_BOX = ("id", "ac-listbox")
     # <li role="option" class="... search-bottom-row">
-    AUTOCOMPLETE_ITEM   = ("css", "#ac-listbox li[role='option']")
+    AUTOCOMPLETE_ITEM = ("css", "#ac-listbox li[role='option']")
     # 병원명: <span class="text-14 text-bold">
-    AUTOCOMPLETE_NAME   = ("css", "#ac-listbox li[role='option'] span.text-14.text-bold")
+    AUTOCOMPLETE_NAME = ("css", "#ac-listbox li[role='option'] span.text-14.text-bold")
     # 주소: <span class="addr-text">
-    AUTOCOMPLETE_ADDR   = ("css", "#ac-listbox li[role='option'] span.addr-text")
+    AUTOCOMPLETE_ADDR = ("css", "#ac-listbox li[role='option'] span.addr-text")
 
     # ── 지역 필터 ─────────────────────────────────────────────────────────────
-    REGION_SIDO         = ("css", "select:first-of-type, select[name*='sido'], .sido-select")
-    REGION_GUGUN        = ("css", "select:nth-of-type(2), select[name*='gugun'], .gugun-select")
+    REGION_SIDO = ("css", "select:first-of-type, select[name*='sido'], .sido-select")
+    REGION_GUGUN = ("css", "select:nth-of-type(2), select[name*='gugun'], .gugun-select")
 
     # ── 결과 없음 ─────────────────────────────────────────────────────────────
-    NO_RESULT_MSG       = ("css", ".no-result, .empty, .no-data, [class*='no-result']")
+    NO_RESULT_MSG = ("css", ".no-result, .empty, .no-data, [class*='no-result']")
 
     # ── 공통 팝업 닫기 버튼 ──────────────────────────────────────────────────
-    POPUP_CLOSE_BTN     = ("xpath", "//button[contains(@class,'btn-dark') and contains(.,'닫기')]")
+    POPUP_CLOSE_BTN = ("xpath", "//button[contains(@class,'btn-dark') and contains(.,'닫기')]")
 
     # ── 상세 팝업 ─────────────────────────────────────────────────────────────
-    DETAIL_POPUP        = ("css", ".detail-popup, .info-window, [class*='popup']")
+    DETAIL_POPUP = ("css", ".detail-popup, .info-window, [class*='popup']")
 
     # ── 진료시간/날짜 필터 ────────────────────────────────────────────────────
-    FILTER_TOGGLE_BTN   = ("css", "button.btn-filter-search")
-    FILTER_SHEET        = ("css", ".filter-sheet-working")
-    FILTER_HOUR_BTN     = ("css", ".hour-btn")
+    FILTER_TOGGLE_BTN = ("css", "button.btn-filter-search")
+    FILTER_SHEET = ("css", ".filter-sheet-working")
+    FILTER_HOUR_BTN = ("css", ".hour-btn")
 
     # ── 동작 ─────────────────────────────────────────────────────────────────
     _LOGIN_BTN_CSS = "a.gnb-account-link[href*='sso-login']"

@@ -7,7 +7,7 @@ import pytest
 from pages.main_page import MainPage
 from pages.login_page import LoginPage
 
-MAIN_URL  = "https://osstem.com/desktop"
+MAIN_URL = "https://osstem.com/desktop"
 LOGIN_URL = "https://osstem.com/desktop/login"
 
 

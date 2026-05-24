@@ -26,10 +26,10 @@ from config.settings import BASE_URL
 from pages.map_page import MapPage
 from pages.login_page import LoginPage
 
-MAP_URL   = "https://osstem.com/desktop/map"
-MAIN_URL  = "https://osstem.com/desktop"
-LOGIN_ID  = os.environ.get("LOGIN_ID", "")
-LOGIN_PW  = os.environ.get("LOGIN_PW", "")
+MAP_URL = "https://osstem.com/desktop/map"
+MAIN_URL = "https://osstem.com/desktop"
+LOGIN_ID = os.environ.get("LOGIN_ID", "")
+LOGIN_PW = os.environ.get("LOGIN_PW", "")
 SSO_DOMAIN = "member.denall.com"
 
 

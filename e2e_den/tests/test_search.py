@@ -107,7 +107,7 @@ class TestSearch:
         assert search_page.get_title() != "", \
             "첫 번째 자동완성 항목({0}) 클릭 후 페이지가 정상이어야 함".format(
                 names[0] if names else "unknown"
-            )
+        )
 
 
 class TestWorkingTimeFilter:

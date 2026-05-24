@@ -321,4 +321,4 @@ if __name__ == "__main__":
     html = generate_html(issues)
     with open("reports/lint/index.html", "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"Lint 완료 — 총 {len(issues)}건 | reports/lint/index.html 생성됨")
+    print(f"Lint 완료 - 총 {len(issues)}건 | reports/lint/index.html 생성됨")

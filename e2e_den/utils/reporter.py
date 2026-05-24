@@ -22,15 +22,15 @@ STATUS_ERROR = "ERROR"
 
 @dataclass
 class TestResult:
-    test_id:     str
+    test_id: str
     description: str
-    status:      str
-    duration:    float = 0.0
-    error_msg:   Optional[str] = None
-    screenshot:  Optional[str] = None
-    url:         Optional[str] = None
-    browser:     Optional[str] = None
-    timestamp:   str = field(default_factory=lambda: datetime.now().isoformat())
+    status: str
+    duration: float = 0.0
+    error_msg: Optional[str] = None
+    screenshot: Optional[str] = None
+    url: Optional[str] = None
+    browser: Optional[str] = None
+    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
 class Reporter:
@@ -47,19 +47,19 @@ class Reporter:
             print(f"      └─ {result.error_msg}")
 
     def summary(self) -> dict:
-        total    = len(self.results)
-        passed   = sum(1 for r in self.results if r.status == STATUS_PASS)
-        failed   = sum(1 for r in self.results if r.status == STATUS_FAIL)
-        skipped  = sum(1 for r in self.results if r.status == STATUS_SKIP)
-        errors   = sum(1 for r in self.results if r.status == STATUS_ERROR)
+        total = len(self.results)
+        passed = sum(1 for r in self.results if r.status == STATUS_PASS)
+        failed = sum(1 for r in self.results if r.status == STATUS_FAIL)
+        skipped = sum(1 for r in self.results if r.status == STATUS_SKIP)
+        errors = sum(1 for r in self.results if r.status == STATUS_ERROR)
         duration = round(time.time() - self.start_time, 2)
         return {
-            "suite":    self.suite_name,
-            "total":    total,
-            "passed":   passed,
-            "failed":   failed,
-            "skipped":  skipped,
-            "errors":   errors,
+            "suite": self.suite_name,
+            "total": total,
+            "passed": passed,
+            "failed": failed,
+            "skipped": skipped,
+            "errors": errors,
             "duration": duration,
             "pass_rate": f"{(passed / total * 100):.1f}%" if total else "0%",
         }
@@ -98,7 +98,7 @@ class Reporter:
         for r in self.results:
             color = {"PASS": "#2ecc71", "FAIL": "#e74c3c", "SKIP": "#95a5a6", "ERROR": "#e67e22"}.get(r.status, "#bdc3c7")
             shot = f'<a href="{r.screenshot}" target="_blank">📷</a>' if r.screenshot else "-"
-            err  = r.error_msg or "-"
+            err = r.error_msg or "-"
             rows += (
                 f'<tr>'
                 f'<td>{r.test_id}</td>'

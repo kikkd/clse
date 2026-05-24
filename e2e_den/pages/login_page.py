@@ -12,20 +12,20 @@ from selenium.webdriver.common.keys import Keys
 
 logger = logging.getLogger(__name__)
 
-SSO_DOMAIN      = "member.denall.com"
+SSO_DOMAIN = "member.denall.com"
 REDIRECT_DOMAIN = "osstem.com"
 
 
 class LoginPage(BasePage):
 
     # ── 엘리먼트 ─────────────────────────────────────────────────────────────
-    USERNAME  = ("css", "input[type='text'], input[name='username'], "
-                        "input[name='userId'], input[name='id'], input[name='loginId']")
-    PASSWORD  = ("css", "input[type='password']")
-    LOGIN_BTN        = ("css", "button.btn-fill.dark.w-100")
+    USERNAME = ("css", "input[type='text'], input[name='username'], "
+                "input[name='userId'], input[name='id'], input[name='loginId']")
+    PASSWORD = ("css", "input[type='password']")
+    LOGIN_BTN = ("css", "button.btn-fill.dark.w-100")
     # 로그인 실패 시 노출되는 모달
     # <div class="modal-content"><div class="modal-body"><div class="text-center">...</div>
-    ERROR_MSG        = ("css", ".modal-content .modal-body .text-center")
+    ERROR_MSG = ("css", ".modal-content .modal-body .text-center")
     ERROR_CONFIRM_BTN = ("css", ".modal-content .btn-fill.orange")
 
     # ── 내부 헬퍼 ─────────────────────────────────────────────────────────────

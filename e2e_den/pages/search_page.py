@@ -9,17 +9,17 @@ from pages.base_page import BasePage
 class SearchPage(BasePage):
 
     # ── 검색 입력 영역 (GNB 검색) ─────────────────────────────────────────────
-    SEARCH_INPUT    = ("css", "input[type='search'], input[name='q'], "
-                              "input[name='search'], input[placeholder*='검색']")
-    SEARCH_BTN      = ("css", "button[type='submit'], .btn-search, "
-                              "[class*='search'][class*='btn']")
-    SEARCH_ICON     = ("css", ".search-icon, .icon-search, [class*='search'][class*='icon']")
+    SEARCH_INPUT = ("css", "input[type='search'], input[name='q'], "
+                    "input[name='search'], input[placeholder*='검색']")
+    SEARCH_BTN = ("css", "button[type='submit'], .btn-search, "
+                  "[class*='search'][class*='btn']")
+    SEARCH_ICON = ("css", ".search-icon, .icon-search, [class*='search'][class*='icon']")
 
     # ── 검색 결과 ─────────────────────────────────────────────────────────────
-    RESULT_LIST     = ("css", ".search-result, .result-list, [class*='result'][class*='list']")
-    RESULT_ITEM     = ("css", ".result-item, .search-item, [class*='result'][class*='item']")
-    RESULT_COUNT    = ("css", ".result-count, .total-count, [class*='count']")
-    NO_RESULT_MSG   = ("css", ".no-result, .no-data, .empty, [class*='no-result']")
+    RESULT_LIST = ("css", ".search-result, .result-list, [class*='result'][class*='list']")
+    RESULT_ITEM = ("css", ".result-item, .search-item, [class*='result'][class*='item']")
+    RESULT_COUNT = ("css", ".result-count, .total-count, [class*='count']")
+    NO_RESULT_MSG = ("css", ".no-result, .no-data, .empty, [class*='no-result']")
 
     # ── 동작 ─────────────────────────────────────────────────────────────────
     def open_search(self) -> None:
