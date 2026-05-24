@@ -10,9 +10,9 @@ pipeline {
         stage('SBT - Lint') {
             steps {
                 dir('e2e_den') {
-                    bat 'C:\\Python38\\python.exe -m pip install flake8 --quiet'
-                    bat 'if not exist reports mkdir reports'
-                    bat 'C:\\Python38\\python.exe -m flake8 . > reports/lint_report.txt || exit 0'
+                    bat 'C:\\Python38\\python.exe -m pip install flake8 flake8-html --quiet'
+                    bat 'if not exist reports\\lint mkdir reports\\lint'
+                    bat 'C:\\Python38\\python.exe -m flake8 --format=html --htmldir=reports/lint . || exit 0'
                 }
             }
         }
@@ -20,10 +20,17 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'e2e_den/reports/lint_report.txt', allowEmptyArchive: true
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'e2e_den/reports/lint',
+                reportFiles: 'index.html',
+                reportName: 'Lint Report'
+            ])
             slackSend channel: '#automation-test',
                       color: 'warning',
-                      message: "🔍 Lint 결과: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n상세 보기: ${env.BUILD_URL}artifact/e2e_den/reports/lint_report.txt"
+                      message: "🔍 Lint 결과: ${env.JOB_NAME} #${env.BUILD_NUMBER}\n상세 보기: ${env.BUILD_URL}Lint_20Report"
         }
     }
 }
